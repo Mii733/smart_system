@@ -1,0 +1,805 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load static %}
+
+
+{% block page_title %}
+{% endblock page_title %}
+{% block content %}
+
+
+
+
+<!-- Bootstrap 4 RTL -->
+<!-- <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> -->
+
+<!-- Custom style for RTL -->
+<!-- <link rel="stylesheet" href="{% static 'dist/css/custom.css' %}"> -->
+
+
+<!-- <link rel="stylesheet" href="{% static 'css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/select2.css' %}">
+   -->
+
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.dataTables.min.css' %}">
+
+<style>
+  .dataTables_info,
+  .dataTables_legthChange,
+  .dataTables_paginate {
+    display: none;
+  }
+</style>
+<!-- 
+<style>
+  /* تخصيص التسمية */
+  #tital {
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #34495e;
+    /* اللون الأساسي مشابه لـ Odoo */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* تخصيص تنسيق الحقول */
+  .form-group {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 15px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+
+  .form-group label:hover {
+    color: #4CAF50;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    font-size: 14px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .form-group input[type="text"]:focus,
+  .form-group input[type="number"]:focus,
+  .form-group select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+    outline: none;
+  }
+
+  /* تخصيص زر الإرسال */
+  input[type="submit"] {
+    background: linear-gradient(145deg, #4CAF50, #45a049);
+    color: white;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  input[type="submit"]:hover {
+    background: linear-gradient(145deg, #45a049, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  input[type="submit"]:active {
+    transform: translateY(1px);
+  }
+
+  /* تخصيص الجدول القابل للتمرير */
+  .scrollable-table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    margin-bottom: 30px;
+  }
+
+  .scrollable-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .scrollable-table th,
+  .scrollable-table td {
+    padding: 14px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+
+  .scrollable-table th {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+  }
+
+  .scrollable-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .scrollable-table tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  .scrollable-table td:hover {
+    background-color: #ddd;
+  }
+
+  /* تخصيص العناصر داخل الـ dropdown */
+  .dropdown-content {
+    position: absolute;
+    background-color: #fff;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 10px 0;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  #btn {
+    margin: 10px 0;
+  }
+
+  /* تخصيص الكارد */
+  .card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+  }
+
+  .card-body {
+    padding: 30px;
+  }
+
+  /* تخصيص العناصر داخل الـ dropdown */
+  .dropdown-content {
+    position: absolute;
+    background-color: #ffffff;
+    /* خلفية بيضاء */
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    /* تأثير ظل ناعم */
+    z-index: 1;
+    padding: 10px 0;
+    border-radius: 6px;
+    /* زاوية دائرية */
+    display: none;
+    border: 1px solid #ddd;
+    /* إضافة حدود خفيفة حول القائمة */
+  }
+
+  /* عند التحويم فوق العنصر داخل الـ dropdown */
+  .dropdown-content .btn {
+    display: block;
+    margin: 5px 0;
+    padding: 10px 20px;
+    background-color: #f7f7f7;
+    /* خلفية هادئة */
+    color: #34495e;
+    /* لون النص الأساسي */
+    text-align: center;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* تأثير عند التحويم */
+    border: none;
+  }
+
+  /* عند التحويم فوق العنصر داخل الـ dropdown */
+  .dropdown-content .btn:hover {
+    background-color: #4CAF50;
+    /* تدرج لون الخلفية */
+    color: white;
+    /* تغيير لون النص عند التحويم */
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+    /* إظهار القائمة عند التحويم */
+  }
+
+  #btn {
+    margin: 10px 0;
+  }
+</style> -->
+
+
+<style>
+  @media print {
+
+    .dt-buttons,
+    .dataTables_info,
+    .paging_simple_numbers,
+    .dataTables_filter {
+      display: none;
+    }
+    #search{
+  display: none;
+
+}
+  }
+ 
+#id_hed {
+  display: none;
+}
+
+</style>
+
+<style>
+ @media print {
+#id_hed {
+  display: block;
+}
+
+}
+
+/* th, td {
+      text-align: right;
+      padding: 8px;
+      border: 1px solid #ddd;
+    } */
+</style>
+<!-- <i class="fa fa-print"></i> -->
+
+<!-- 
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-lg">
+          <div class="card-header">
+            <div class="row invoice-info" id="id_hed">
+              {% for data_info in data_report_header %}
+              <div class="col-sm-4 invoice-col">
+                <address>
+                  <strong>{{ data_info.field1_right }}</strong><br>
+                  <strong>{{ data_info.field2_right }}</strong><br>
+                  <strong>{{ data_info.field3_right }}</strong><br>
+                </address>
+              </div>
+              <div class="col-sm-4 invoice-col text-center">
+                <img class="image-thumbnail" src="{{ data_info.imge.url }}" alt="Card image cap" width="200" height="120">
+              </div>
+              <div class="col-sm-4 invoice-col">
+                <strong>{{ data_info.field1_left }} :</strong><br>
+                <b>{{ data_info.field2_left }} :</b><br>
+                <strong>{{ data_info.field3_left }} :</strong><br>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="row no-print">
+              <div class="d-flex w-100 align-items-center justify-content-between" id="search" >
+                <div class="float-right">
+                  <button type="button" class="btn btn-primary btn-search" data-toggle="modal" data-target="#modal-lg2">
+                    بحث متعدد </button>
+                </div>
+                <a class="btn btn-outline-primary btn-sm float-left" id="btnbtn" title="الرجوع إلى الصفحة السابقة"
+                  href="{% url 'display_data' table_name sys_name_id %}">
+                  رجوع
+                  <i class='fas fa-sign-out-alt'></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="scrollable-table">
+              {{ table_html|safe }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-lg">
+          <div class="card-header">
+            <div class="row invoice-info" id="id_hed">
+              {% for data_info in data_report_header %}
+              <!-- <div class="col-sm-4 invoice-col">
+                <address>
+                  <strong>{{ data_info.field1_right }}</strong><br>
+                  <strong>{{ data_info.field2_right }}</strong><br>
+                  <strong>{{ data_info.field3_right }}</strong><br>
+                </address>
+              </div> -->
+              <div class="col-sm-4 invoice-col">
+                <strong>{{ data_info.field1_left }} :</strong><br>
+                <b>{{ data_info.field2_left }} :</b><br>
+                <strong>{{ data_info.field3_left }} :</strong><br>
+              </div>
+              <div class="col-sm-4 invoice-col text-center">
+                <img class="image-thumbnail" src="{{ data_info.imge.url }}" alt="Card image cap" width="200" height="120">
+              </div>
+              <!-- <div class="col-sm-4 invoice-col">
+                <strong>{{ data_info.field1_left }} :</strong><br>
+                <b>{{ data_info.field2_left }} :</b><br>
+                <strong>{{ data_info.field3_left }} :</strong><br>
+              </div> -->
+              <div class="col-sm-4 invoice-col">
+                <address>
+                  <strong>{{ data_info.field1_right }}</strong><br>
+                  <strong>{{ data_info.field2_right }}</strong><br>
+                  <strong>{{ data_info.field3_right }}</strong><br>
+                </address>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="row no-print">
+              <div class="d-flex w-100 align-items-center justify-content-between" id="search" >
+                <div class="float-right">
+                  <button type="button" class="btn btn-primary btn-search" data-toggle="modal" data-target="#modal-lg2">
+                    بحث متعدد </button>
+                </div>
+                <a class="btn btn-outline-primary btn-sm float-left" id="btnbtn" title="الرجوع إلى الصفحة السابقة"
+                  href="{% url 'display_data' table_name sys_name_id %}">
+                  رجوع
+                  <i class='fas fa-sign-out-alt'></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="scrollable-table">
+              {{ table_html|safe }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Main content -->
+<!-- <section class="content">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="float-right">
+            <button type="button" class="btn btn-primary btn-search" data-toggle="modal" data-target="#modal-lg2">
+              بحث متعدد </button>
+          </div>
+          <div class="row invoice-info"  id="id_hed">
+            {% for data_info in data_report_header %}
+            <div class="col-sm-4 invoice-col">
+              <address>
+                <strong>{{ data_info.field1_right }}</strong><br>
+                <strong>{{ data_info.field2_right }}</strong><br>
+                <strong>{{ data_info.field3_right }}</strong><br>
+              </address>
+            </div>
+            <div class="col-sm-4 invoice-col text-center">
+              <img class="image-thumbnail" src="{{ data_info.imge.url }}" alt="Card image cap" width="200" height="120">
+            </div>
+            <div class="col-sm-4 invoice-col">
+              <strong>{{ data_info.field1_left }} :</strong><br>
+              <b>{{ data_info.field2_left }} :</b><br>
+              <strong>{{ data_info.field3_left }} :</strong><br>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="scrollable-table">
+            {{ table_html|safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<!-- CSS for design enhancement -->
+
+<!-- خاص بعملية البحث -->
+<section>
+  <div class="modal fade" id="modal-lg2">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"> تنقية البيانات </h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Main modal -->
+          <form method="POST" action="">
+            <div class="form-group">
+              {% csrf_token %}
+              {{ form.as_p }}
+            </div>
+
+            <div class="modal-footer justify-content-between">
+              <!-- <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button> -->
+              <button type="submit" class="btn btn-primary btn-search">بحث</button>
+              <!-- <input type="submit" class="btn btn-primary btn-search" value="بحث"> -->
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+</section>
+
+
+{% endblock content %}
+{% block scripts %}
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.print.js'%}"></script>
+<script src="{% static 'plugins/jszip/jszip.min.js'%}"></script>
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js'%}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-colreorder/js/dataTables.colReorder.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-colreorder/js/dataTables.responsive.min.js' %}"></script>
+
+
+<!-- // منع الطباعة باستخدام اختصار Ctrl+P -->
+<!-- <script>
+  document.addEventListener('keydown', function(event) {
+      // إذا تم الضغط على Ctrl + P
+      if (event.ctrlKey && event.key === 'p') {
+          event.preventDefault();  // إيقاف عمل الاختصار
+          alert('تم تعطيل الطباعة في هذه الصفحة');
+      }
+  });
+</script> -->
+
+
+
+
+<!-- <script>
+  document.querySelectorAll('input, select, textarea').forEach(function(element) {
+      element.required = false;
+  });
+</script> -->
+
+<script>
+  $('#example1').DataTable({
+    language: {
+      emptyTable: "لا توجد بيانات في الجدول",
+      zeroRecords: "لا توجد سجلات مطابقة",
+    },
+    dom: 'Bfrtip',
+    buttons: [
+      {
+        extend: 'excelHtml5',
+        text: ' <i class="fa fa-file-excel"></i>',
+        titleAttr: 'تصدير اكسل',
+      },
+      {
+        extend: 'colvis',
+        text: ' اخفاء الاعمدة',
+      }
+    ],
+    pageLength: -1 // عرض جميع الصفوف
+  });
+</script>
+
+
+<script>
+  
+  $(document).ready(function () {
+    // alert("ok");
+
+var table = $('#example1').DataTable({
+
+  responsive: true,
+
+  colReorder: true,
+
+  orderable: false,
+
+  columnDefs: [{ orderable: false, targets: '_all' }],
+
+  fixedHeader: true,
+
+  // dom:'Bfrtip',
+  // buttons: [
+  //     {
+  //       extend: 'excelHtml5',
+  //       text: ' <i class=" fa fa-file-excel"></i>',
+  //       titleAttr: 'تصدير اكسل',
+  //       exportOptions:{
+  //         columns: function(idx, data, node){
+  //           return $(node).text() !== 'id' && $(node).text() !== 'الحدث';
+  //         }
+  //       }
+
+  //     },
+  //     {
+  //       extend: 'colvis',
+  //       text: ' اخفاء الاعمدة'
+
+  //     }
+
+
+  //   ],
+
+
+});
+
+var sourceColumnIndex = -1; // العمود المصدر
+
+var isMoving = false; // حالة النقل
+
+var resizing = false; // حالة تغيير الحجم
+
+// إضافة مقبض تغيير الحجم فقط في رأس العمود
+
+$('#example1 thead th').each(function (index) {
+
+  var header = $(this);
+
+  header.css('position', 'relative');
+
+  header.append('<div class="resizer"></div>');
+
+  // تحديد العمود عند النقر
+
+  header.on('click', function () {
+
+    if (sourceColumnIndex === index) {
+
+      // إذا تم النقر على نفس العمود، قم بإلغاء التحديد
+
+      sourceColumnIndex = -1;
+
+      $('#example1 thead th').removeClass('selected');
+
+    } else {
+
+      // تعيين العمود المصدر
+
+      sourceColumnIndex = index;
+
+      $('#example1 thead th').removeClass('selected');
+
+      header.addClass('selected');
+
+    }
+
+  });
+
+  // التعامل مع سحب العمود
+
+  header.on('mousedown', function () {
+
+    resizing = true;
+
+  });
+
+  // نقل العمود عند النقر على عمود آخر
+
+  header.on('mouseup', function () {
+
+    if (isMoving && sourceColumnIndex !== -1) {
+
+      var targetColumnIndex = index;
+
+      if (targetColumnIndex !== sourceColumnIndex) {
+
+        // تنفيذ عملية النقل
+
+        var columnData = table.column(sourceColumnIndex).data().toArray();
+
+        table.column(sourceColumnIndex).data(table.column(targetColumnIndex).data().toArray());
+
+        table.column(targetColumnIndex).data(columnData);
+
+
+        // تحديث الجدول
+
+        table.draw();
+
+      }
+
+    }
+
+  });
+
+  var resizer = header.find('.resizer');
+
+  resizer.on('mousedown', function (e) {
+
+    e.preventDefault();
+
+    var startX = e.pageX;
+
+    var startWidth = header.width();
+
+    $(document).on('mousemove', function (e) {
+
+      if (resizing) {
+
+        var newWidth = startWidth + (e.pageX - startX);
+
+        header.css('min-width', newWidth + 'px');
+
+      }
+
+    });
+
+    $(document).on('mouseup', function () {
+
+      resizing = false;
+
+      $(document).off('mousemove');
+
+      $(document).off('mouseup');
+
+    });
+
+  });
+
+});
+
+// التحكم في نقل العمود باستخدام لوحة المفاتيح
+
+$(document).keydown(function (e) {
+
+  if (sourceColumnIndex !== -1) { // تأكد من تحديد عمود
+
+    if (e.key === 'n' || e.key === 'N') {
+
+      // تفعيل وضع النقل
+
+      isMoving = true;
+
+      console.log("وضع النقل مفعل. حدد العمود الهدف.");
+
+    } else if (isMoving && (e.key === 'm' || e.key === 'M')) {
+
+      // تنفيذ عملية النقل
+
+      var targetColumnIndex = sourceColumnIndex; // العمود الهدف
+
+      $('#example1 thead th').each(function (index) {
+
+        if ($(this).hasClass('selected') && index !== sourceColumnIndex) {
+
+          targetColumnIndex = index;
+
+        }
+
+      });
+
+      if (targetColumnIndex !== sourceColumnIndex) {
+
+        // تنفيذ عملية النقل
+
+        var columnData = table.column(sourceColumnIndex).data().toArray();
+
+        table.column(sourceColumnIndex).data(table.column(targetColumnIndex).data().toArray());
+
+        table.column(targetColumnIndex).data(columnData);
+
+
+        // تحديث الجدول
+
+        table.draw();
+
+        sourceColumnIndex = -1; // إلغاء التحديد بعد النقل
+
+        $('#example1 thead th').removeClass('selected'); // إزالة التحديد
+
+      }
+
+      isMoving = false; // إلغاء وضع النقل
+
+    } else if (e.key === 'ArrowRight') {
+
+      // زيادة عرض العمود
+
+      if (sourceColumnIndex !== -1) {
+
+        var header = $('#example1 thead th').eq(sourceColumnIndex);
+
+        var newWidth = header.width() + 10; // زيادة 10 بيكسل
+
+        header.css('min-width', newWidth + 'px');
+
+      }
+
+    } else if (e.key === 'ArrowLeft') {
+
+      // تقليل عرض العمود
+
+      if (sourceColumnIndex !== -1) {
+
+        var header = $('#example1 thead th').eq(sourceColumnIndex);
+
+        var newWidth = header.width() - 10; // تقليل 10 بيكسل
+
+        if (newWidth > 50) { // تأكد من عدم تقليل العرض لأقل من 50 بيكسل
+
+          header.css('min-width', newWidth + 'px');
+
+        }
+
+      }
+
+    }
+
+  }
+
+});
+
+});
+
+</script>
+
+<script src="{% static 'js/jquery-3.6.0.min.js'%}"></script>
+<script src="{% static 'js/select2.js'%}"></script>
+
+
+<script>
+  $(function () {
+    $('.js-select2').select2({
+      placeholder: 'بحث',
+      width: "100%"
+    })
+  });
+</script>
+
+{% endblock scripts %}

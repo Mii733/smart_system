@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+
+<h1 style="text-align: center; color: #2C3E50;">{{ model.modelnameAr }}</h1>
+
+{% if messages %}
+  <div class="container">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4 animate__animated animate__fadeIn" role="alert">
+        <div class="d-flex align-items-center">
+          <!-- أيقونة الرسالة -->
+          {% if message.tags == 'success' %}
+            <i class="fa fa-check-circle me-2" style="color: #2e7d32;"></i>  <!-- لون النجاح -->
+          {% elif message.tags == 'error' %}
+            <i class="fa fa-times-circle me-2" style="color: #d32f2f;"></i>  <!-- لون الخطأ -->
+          {% elif message.tags == 'warning' %}
+            <i class="fa fa-exclamation-circle me-2" style="color: #fbc02d;"></i>  <!-- لون التحذير -->
+          {% elif message.tags == 'info' %}
+            <i class="fa fa-info-circle me-2" style="color: #1976d2;"></i>  <!-- لون المعلومات -->
+          {% endif %}
+          
+          <!-- نص الرسالة -->
+          <div>
+            {{ message }}
+          </div>
+        </div>
+        
+        <!-- زر الإغلاق -->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-lg">
+          <div class="card-header">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <div class="float-right">
+                <a href="{% url 'add_field' model_name=model_name sys_name_id=sys_name_id %}"
+                  class="btn btn-outline-primary btn-sm">
+                  <i class="fa fa-plus-circle"></i> حقل جديد
+                </a>
+              </div>
+              <!-- <div class="float-right">
+                <a href="{% url 'condition_list' model_name=model_name sys_name_id=sys_name_id %}"
+                  class="btn btn-outline-primary btn-sm">
+                  <i class="fa fa-plus-circle"></i>  عرض الشروط
+                </a>
+              </div> -->
+              <!-- <h3 class="box-title titlefix">{{ model.modelnameAr }}</h3> -->
+              <a class="btn btn-outline-primary btn-sm float-left" id="btnbtn" title="الرجوع إلى الصفحة السابقة"
+                href="{% url 'subproject_detail' sys_name_id=sys_name_id %}">
+                رجوع
+                <i class='fas fa-sign-out-alt'></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="scrollable-table">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>اسم العمود أو الحقل</th>
+                    <th>نوع البيانات</th>
+                    <th>قيمة فارغة</th>
+                    <th>يمكن التكرار</th>
+                    <!-- <th>مرتبط</th> -->
+                    <th>الحدث</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for field in field_schema %}
+                  <tr>
+                    <td>{{ field.kwargs.verbose_name }}</td>
+                    <td>
+                      {% if field.class_name == 'django.db.models.CharField' %}
+                      نص
+                      {% elif field.class_name == 'django.db.models.ManyToManyField' %}
+                      علاقة متعددة
+                      {% elif field.class_name == 'django.db.models.ForeignKey' %}
+                      علاقة
+                      {% elif field.class_name == 'django.db.models.TextField' %}
+                      نص طويل
+                      {% elif field.class_name == 'django.db.models.IntegerField' %}
+                      عدد حقيقي
+                      {% elif field.class_name == 'django.db.models.FloatField' %}
+                      عدد عشري
+                      {% elif field.class_name == 'django.db.models.BooleanField' %}
+                      منطقي
+                      {% elif field.class_name == 'django.db.models.DateTimeField' %}
+                      تاريخ
+                      {% elif field.class_name == 'django.db.models.FileField' %}
+                      ملف
+                      {% elif field.class_name == 'django.db.models.ImageField' %}
+                      صورة
+                      {% endif %}
+                    </td>
+                    {% if field.kwargs.null == True %}
+                    <td>نعم</td>
+                    {% else %}
+                    <td>لا</td>
+                    {% endif %}
+                    {% if field.kwargs.unique == false %}
+                    <td>نعم</td>
+                    {% else %}
+                    <td>لا</td>
+                    {% endif %}
+
+                    <td class="text-center">
+                      <a href="{% url 'update_field' model_name=model_name field_id=field.id sys_name_id=sys_name_id %}"
+                        class="btn btn-outline-secondary btn-xs" title="تعديل الحقل">
+                        <i class="fa fa-edit"></i>
+                      </a>
+
+                      <a href="{% url 'delete_field' model_name=model_name field_name=field.name sys_name_id=sys_name_id %}"
+                        class="btn btn-outline-danger btn-xs" data-toggle="tooltip"
+                        onclick="return confirm('هل تريد الحف')" title="{% trans 'حذف الحقل' %}">
+                        <i class="fa fa-trash"></i>
+                      </a>
+
+                      
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Main content -->
+<!-- 
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-lg">
+          <div class="card-header">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <div class="float-right">
+                <a href="{% url 'add_field' model_name=model_name sys_name_id=sys_name_id %}"
+                  class="btn btn-outline-primary btn-sm">
+                  <i class="fa fa-plus-circle"></i> حقل جديد
+                </a>
+              </div>
+              <h3 class="box-title titlefix">{{ model.modelnameAr }}</h3>
+              <a class="btn btn-outline-primary btn-sm float-left" id="btnbtn" title="الرجوع إلى الصفحة السابقة"
+                href="{% url 'subproject_detail' sys_name_id=sys_name_id %}">
+                رجوع
+                <i class='fas fa-sign-out-alt'></i>
+              </a>
+            </div>
+
+
+
+          </div>
+
+          <div class="card-body">
+
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>اسم العمود أو الحقل</th>
+                  <th>نوع البيانات</th>
+                  <th>قيمة فارغة</th>
+                  <th>يمكن التكرار</th>
+                  <th>مرتبط</th>
+                  <th>الحدث</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for field in fields %}
+                <tr>
+                  <td>{{ field.verbose_name }}</td>
+                  <td>
+                    {% if field.field_type == 'CharField' %}
+                    نص
+                    {% elif field.field_type == 'ForeignKey' %}
+                    علاقة
+                    {% elif field.field_type == 'TextField' %}
+                    نص طويل
+                    {% elif field.field_type == 'IntegerField' %}
+                    عدد حقيقي
+                    {% elif field.field_type == 'FloatField' %}
+                    عدد عشري
+                    {% elif field.field_type == 'BooleanField' %}
+                    منطقي
+                    {% elif field.field_type == 'DateTimeField' %}
+                    تاريخ
+                    {% elif field.field_type == 'FileField' %}
+                    ملف
+                    {% elif field.field_type == 'ImageField' %}
+                    صورة
+                    {% endif %}
+                  </td>
+                  {% if field.null_or_not == True %}
+                  <td>نعم</td>
+                  {% else %}
+                  <td>لا</td>
+                  {% endif %}
+                  {% if field.unique_or_not == True %}
+                  <td>نعم</td>
+                  {% else %}
+                  <td>لا</td>
+                  {% endif %}
+                  {% if field.is_related == True %}
+                  <td>نعم</td>
+                  {% else %}
+                  <td>لا</td>
+                  {% endif %}
+
+                  <td class="text-center">
+                    <a href="{% url 'update_field' model_name=model_name field_id=field.id sys_name_id=sys_name_id %}"
+                      class="btn btn-outline-secondary btn-xs" title="تعديل الحقل">
+                      <i class="fa fa-edit"></i>
+                    </a>
+
+                    <a href="{% url 'delete_field' model_name=model_name field_name=field.field_name sys_name_id=sys_name_id %}"
+                        class="btn btn-outline-danger btn-xs" data-toggle="tooltip"
+                        onclick="return confirm('هل تريد الحف')" title="{% trans 'حذف الحقل' %}">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+{% endblock %}

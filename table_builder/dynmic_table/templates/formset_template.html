@@ -1,0 +1,269 @@
+{% load static %}
+
+{% block content %}
+
+<!-- إضافة ملفات الـ CSS الأساسية للصفحة -->
+<link rel="stylesheet" href="{% static 'dist/css/custom.css' %}">
+<link rel="stylesheet" href="{% static 'css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/select2.css' %}">
+
+<style>
+    /* تنسيق الحاوية الرئيسية للنموذج */
+    .form-container {
+        width: 98%;
+        /* العرض بنسبة 98% من عرض الشاشة */
+        max-width: 1200px;
+        /* الحد الأقصى للعرض */
+        margin: 0 auto;
+        /* محاذاة الحاوية في الوسط */
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* تنسيق العناوين والأزرار */
+    .page-title {
+        font-size: 32px;
+        font-weight: 600;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+
+    }
+
+    /* تخصيص تنسيق الحقول داخل النموذج */
+    .form-group {
+        display: flex;
+        flex-wrap: wrap;
+        /* يسمح للحقول بالتنقل بشكل تلقائي حسب العرض */
+        justify-content: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        width: 200px;
+        text-align: right;
+        /* محاذاة النص إلى اليمين */
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select {
+        direction: rtl;
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 5px;
+        font-size: 16px;
+    }
+
+    /* إضافة تأثير عند التركيز على الحقول */
+    .form-group input[type="text"]:focus,
+    .form-group input[type="number"]:focus,
+    .form-group select:focus {
+        border-color: #4CAF50;
+        outline: none;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+    }
+
+    /* تخصيص زر الإرسال */
+    button[type="submit"] {
+        background-color: #1e2a3a;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    /* تنسيق الجدول */
+    table {
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: collapse;
+        /* دمج الحدود */
+        margin-top: 20px;
+    }
+
+    table thead {
+        background-color: #1e2a3a;
+        color: white;
+    }
+
+    table th,
+    table td {
+        padding: 12px;
+        text-align: right;
+        border: 1px solid #ddd;
+    }
+
+    table td.number {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    /* زر الإغلاق */
+    #close {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    #close button {
+        background-color: #fcfaf9;
+        /* background-color: white; */
+        color: black;
+        border: none;
+        padding: 12px;
+        /* border-radius: 5%; */
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.3s ease;
+
+    }
+
+    /* #close button {
+    background-color: #fcfaf9;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  } */
+
+    /* #close button:hover {
+        background-color: #1e2a3a;
+        color: white;
+    } */
+
+    .alert-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .alert-warning {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .body {
+        background-color: gray;
+    }
+</style>
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div id="body">
+    <div class="form-container">
+        <form method="post">
+            <div id="close" class="text-left">
+                <a href="{% url 'formset_view' model_name sys_name_id %}">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </a>
+            </div>
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        {% for field in formset.forms.0 %}
+                        <th>{{ field.label }}</th>
+                        {% endfor %}
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                    <tr class="form-row">
+                        <td class="number">{{ forloop.counter }}</td>
+                        {% for field in form %}
+                        <td>
+                            {{ field }}
+                            {% if field.errors %}
+                            <div class="error">{{ field.errors }}</div>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="submit">حفظ</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteCheckboxes = document.querySelectorAll('input[type="checkbox"][name*="DELETE"]');
+        deleteCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const row = this.closest('tr');
+                if (this.checked) {
+                    row.style.opacity = '0.5';
+                    row.style.backgroundColor = '#ffcccc';
+                } else {
+                    row.style.opacity = '1';
+                    row.style.backgroundColor = '';
+                }
+            });
+        });
+    });
+</script>
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/select2.js' %}"></script>
+<script>
+    $(function () {
+        $('.js-select2').select2({
+            placeholder: 'بحث',
+            width: "100%"
+        });
+    });
+</script>
+
+{% endblock %}

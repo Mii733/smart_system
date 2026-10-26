@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyApp</title>
+</head>
+<body>
+    <h1>User Interfaces:</h1>
+    <ul>
+        {% for table in tables %}
+        <li><a href="{% url 'display_data' table.id %}">{{ table.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <div class="dropdown">
+        <button class="dropdown-btn">اختر</button>
+        <div class="dropdown-content">
+            <ul>
+                {% for table in tables %}
+                <li><a href="{% url 'display_data' table.id %}">{{ table.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+      </div>
+      <select class="form-select" aria-label="Default select example">
+        <option selected>Open this select menu</option>
+        {% for table in tables %}
+        <option value="1"><a href="{% url 'display_data' table.id %}">{{ table.name }}</a></option>
+        {% endfor %}
+      </select>
+    <a href="{% url 'create_table' %}">Create New table</a>
+    <a href="{% url 'data_list' %}"> عرض البيانات </a>
+    
+</body>
+</html>

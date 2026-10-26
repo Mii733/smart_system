@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load static %}
+
+
+{% block content %}
+
+<!-- العنوان و الوصف الخاص بالمشروع -->
+<h1 style="text-align: center; color: #2C3E50;">{{ subproject.name }}</h1>
+
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<!-- عرض نماذج المشروع داخل حاوية بطاقات -->
+<!-- <div class="container">
+    <div class="row">
+        {% for model in models %}
+        <div class="col">
+            <a href="{% url 'manage_models' model_name=model.modelname sys_name_id=sys_name_id %}" class="card">
+                {{ model.modelnameAr }}
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div> -->
+
+
+
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-lg">
+          <div class="card-header">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <div class="float-right">
+                <a href="{% url 'create_models' sys_name_id=sys_name_id %}" class="btn btn-outline-primary btn-sm">
+                  <i class="fa fa-plus-circle"></i> جدول جديد
+                </a>
+              </div>
+              <!-- <h3 class="box-title titlefix">{{ model.modelnameAr }}</h3> -->
+              <a class="btn btn-outline-primary btn-sm float-left" id="btnbtn" title="الرجوع إلى الصفحة السابقة"
+                href="{% url 'subprojects_manage' %}">
+                رجوع
+                <i class='fas fa-sign-out-alt'></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="scrollable-table">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>{% trans "#" %}</th>
+                    <th>الاسم العربي</th>
+                    <th>الاسم الانجليزي</th>
+                    <th>النوع</th>
+                    <th>{% trans "العمليات" %}</th>
+                  </tr>
+                </thead>
+                {% for model in models %}
+                <tbody>
+                  <tr>
+                    <td>{{ model.id }}</td>
+                    <td>{{ model.modelnameAr }}</td>
+                    <td>{{ model.modelname }}</td>
+                    <td>{{ model.model_type }}</td>
+                    <td class="mailbox-date pull-right no-print">
+                      <!-- <a href="{% url 'update_table' model_id=model.id sys_name_id=sys_name_id %}"
+                        class="btn btn-outline-secondary btn-xs" data-toggle="tooltip"
+                        title="{% trans 'تعديل اسم الجدول' %}">
+                        <i class="fa fa-edit"></i>
+                      </a> -->
+                      <a href="{% url 'manage_models' model_name=model.modelname  sys_name_id=sys_name_id%}"
+                        class="btn btn-outline-secondary btn-xs" data-toggle="tooltip" title="{% trans 'عرض الجدول' %}">
+                        <i class="fa fa-cogs"></i>
+                      </a>
+                      </a>
+                      <!-- <a href="javascript:void(0);" class="btn btn-outline-secondary btn-xs delete_row"
+                        data-id="{{ model.modelname }}" title="حذف الجدول">
+                        <i class="fa fa-trash"></i>
+                      </a> -->
+
+                      <a href="{% url 'delete_model' model_name=model.modelname sys_name_id=sys_name_id %}"
+                        class="btn btn-outline-danger btn-xs" data-toggle="tooltip"
+                        onclick="return confirm('هل تريد الحف')" title="{% trans 'حذف الجدول' %}">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- جافا سكربت خاص بالحذف -->
+
+
+
+{% endblock %}
+
+<!-- <script>
+  let csrf_token = '{{ csrf_token }}';
+  $(document).on('click', '.delete_row', function () {
+    let model_name = $(this).data('id');
+    var url = "{% url 'delete_model' %}";
+
+    if (confirm('هل حقاً تريد حذف هذا الجدول')) {
+      $.ajax({
+        url: url,
+        data: {
+          'model_name': model_name,
+
+        },
+        method: 'DELETE',
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("X-CSRFToken", csrf_token);
+        },
+        success: function (data) {
+          if (data.status == 1) {
+            alert(data.message);
+            location.reload();
+          } else {
+            alert(data.message);
+          }
+        },
+        error: function () {
+          alert("حدث خطأ أثناء الحذف.");
+        }
+      });
+    }
+  });
+
+</script> -->
+
+
+<!-- <a href="{% url 'delete_model' model_name=model.modelname%}" class="btn btn-outline-danger btn-xs"
+                        data-toggle="tooltip" onclick="return confirm('{   trans هل تريد الاستمرارفي الحذف }')"
+                        title="{% trans 'حذف الجدول' %}">
+                        <i class="fa fa-trash"></i> -->

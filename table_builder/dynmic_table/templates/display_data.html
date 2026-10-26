@@ -1,0 +1,536 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load static %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.dataTables.min.css' %}">
+
+<!-- <link rel="stylesheet" href="{% static 'plugins/datatables-colreorder/css/colReorder.bootstrap4.min.css' %}"> -->
+<!-- <link rel="stylesheet" href="{% static 'plugins/datatables-colreorder/css/colReorder.bootstrap4.css' %}"> -->
+
+
+
+
+
+
+<!-- <h5 id="tital" val="{{modelnamear.modelnameAr}}"> {{modelnamear}} </h5> -->
+<input type="text" hidden id="idd_model_name" value="{{modelnamear}}"> </input>
+
+{% if messages %}
+<div class="alert-container">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="dropdown">
+            <button class="fas fa-bars" data-widget="pushmenu"></button>
+            <div class="dropdown-content">
+              <!-- <div id="btn">
+                <button type="button" class="btn btn-block btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal-lg2">
+                  بحث متعدد </button>
+              </div> -->
+              <!-- <div id="btn">
+                <a id="downloadLink" href="{% url 'report_view' model_name sys_name_id %}"
+                  class="btn btn-block btn-outline-primary btn-sm"><i class="fa fa-file-excel"></i> 
+                 
+                  بحث متعدد </a>
+              </div> -->
+              <div id="btn">
+                <a id="downloadLink" href="{% url 'export_empty_excel' model_name sys_name_id %}"
+                  class="btn btn-block btn-outline-primary btn-sm"><i class="fa fa-file-excel"></i> 
+                 
+                  قالب </a>
+              </div>
+              <div id="btn">
+                <a id="downloadLink" href="{% url 'report_view' model_name sys_name_id %}" 
+                  class="btn btn-block btn-outline-primary btn-sm"><i class="fa fa-chart-bar"></i> <!-- تقارير بيانية -->
+                  التقارير </a>
+              </div>
+              <div id="btn">
+                <a href="{% url 'add_data' model_name sys_name_id %}" class="btn btn-block btn-outline-primary btn-sm" id="btn">
+                  <i class="fa fa-plus-circle"></i>إظافة بيانات</a>
+              </div>
+              <div id="btn">
+                <a href="{% url 'formset_view' model_name sys_name_id %}" class="btn btn-block btn-outline-primary btn-sm"
+                  id="btn"><i class="fa fa-file-excel"></i>إستيراد بيانات </a>
+              </div>
+              <!-- <div id="btn">
+                <a href="{% url 'export_to_excel' model_name sys_name_id %}" class="btn btn-block btn-outline-primary btn-sm"
+                  id="btn"> <i class="fa fa-upload"></i> 
+                </i>تصدير </a>
+              </div> -->
+
+            </div>
+          </div>
+
+          <div class="row float-right">
+            <h5 >{{modelnamear}}</h5>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="scrollable-table">
+            {{ table_html|safe }}
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+
+<section>
+  <div class="modal fade" id="modal-lg2">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"> تنقية البيانات </h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Main modal -->
+          <form method="POST" action="">
+            <div class="form-group">
+              {% csrf_token %}
+              {{ form.as_p }}
+            </div>
+
+            <div class="modal-footer justify-content-between">
+              <!-- <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button> -->
+              <button type="submit" class="btn btn-primary btn-search">بحث</button>
+              <!-- <input type="submit" class="btn btn-primary btn-search" value="بحث"> -->
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+</section>
+
+
+
+
+{% endblock content %}
+{% block scripts %}
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.print.js'%}"></script>
+<script src="{% static 'plugins/jszip/jszip.min.js'%}"></script>
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js'%}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-colreorder/js/dataTables.colReorder.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-colreorder/js/dataTables.responsive.min.js' %}"></script>
+
+<!-- <script src="{% static 'plugins/datatables-colreorder/js/colReorder.bootstrap4.js' %}"></script> -->
+<!-- <script src="{% static 'plugins/datatables-colreorder/js/colReorder.bootstrap4.min.js' %}"></script> -->
+
+
+
+
+
+
+<!-- خاص با الحذف -->
+<section>
+  <script>
+    $(document).on('click', '.delete_row', function () {
+      if (confirm('هل حقا تريد الحذف؟')) {
+        let id_row = $(this).data('id');
+        $.ajax({
+          url: $(this).data('url'),
+          data: {
+            'id': id_row,
+          },
+          method: 'DELETE',
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("X-CSRFToken", csrf);
+          },
+          success: function (data) {
+            if (data.status == 1) {
+              alert(data.message)
+              $('.datatable').DataTable().ajax.reload();
+            }
+            if (data.status == 0)
+              alert(data.message)
+          },
+          error: function (data) {
+          }
+        });
+      }
+    });
+  </script>
+
+</section>
+
+<script>
+  function confirmDelete() {
+    if (confirm("هل أنت متأكد من رغبتك في حذف العنصر؟")) {
+      // إذا تم تأكيد الحذف
+      document.getElementById("deleteForm").submit();
+    } else {
+      // إذا تم إلغاء الحذف
+      return false;
+    }
+  }
+</script>
+
+<!-- // منع الطباعة باستخدام اختصار Ctrl+P -->
+<script>
+  document.addEventListener('keydown', function(event) {
+      // إذا تم الضغط على Ctrl + P
+      if (event.ctrlKey && event.key === 'p') {
+          event.preventDefault();  // إيقاف عمل الاختصار
+          alert('تم تعطيل الطباعة في هذه الصفحة');
+      }
+  });
+</script>
+
+<!-- 
+<script>
+  $('#example1').DataTable({
+    language: {
+      searching: true,
+      colReorder: true, // تفعيل ترتيب الأعمدة
+      search: "البحث:",
+      emptyTable: "لا توجد بيانات في الجدول",
+      zeroRecords: "لا توجد سجلات مطابقة",
+      info: "إظهار _START_ إلى _END_ من أصل _TOTAL_ سجلات",
+      infoEmpty: "إظهار 0 إلى 0 من أصل 0 سجلات",
+      infoFiltered: "(مفلترة من إجمالي _MAX_ سجل)",
+      lengthMenu: "إظهار _MENU_ إدخالات",
+      paginate: {
+        first: "الأول",
+        last: "الأخير",
+        next: "التالي",
+        previous: "السابق"
+      }
+    }
+  });
+</script> -->
+<!-- 
+<script>
+  $('#example1').DataTable({
+    // language: {
+    //   searching: true,
+    //   search: "البحث:",
+    //   emptyTable: "لا توجد بيانات في الجدول",
+    //   zeroRecords: "لا توجد سجلات مطابقة",
+    //   // info: "إظهار _START_ إلى _END_ من أصل _TOTAL_ سجلات",
+    //   // infoEmpty: "إظهار 0 إلى 0 من أصل 0 سجلات",
+    //   // infoFiltered: "(مفلترة من إجمالي _MAX_ سجل)",
+    //   // lengthMenu: "إظهار _MENU_ إدخالات",
+    //   // paginate: {
+    //   //     first: "الأول",
+    //   //     last: "الأخير",
+    //   //     next: "التالي",
+    //   //     previous: "السابق"
+    //   // }
+    // },
+   
+    dom: 'Bfrtip',
+    buttons: [
+      {
+        extend: 'excelHtml5',
+        text: ' <i class=" fa fa-file-excel"></i>',
+        titleAttr: 'تصدير اكسل',
+
+      },
+      // {
+      //   extend: 'colvis',
+      //   text: ' اخفاء الاعمدة'
+
+      // }
+
+
+    ]
+  });
+</script> -->
+
+<script>
+  
+  $(document).ready(function () {
+    // alert("ok");
+
+var table = $('#example1').DataTable({
+
+  // responsive: true,
+
+  colReorder: true,
+
+  orderable: false,
+
+  columnDefs: [{ orderable: false, targets: '_all' }],
+
+
+
+
+  fixedHeader: true,
+
+dom:'Bfrtip',
+  buttons: [
+      {
+        extend: 'excelHtml5',
+        text: ' <i class=" fa fa-file-excel"></i>',
+        titleAttr: 'تصدير اكسل',
+        exportOptions:{
+          columns: function(idx, data, node){
+            return $(node).text() !== 'id' && $(node).text() !== 'الحدث';
+          }
+        }
+
+      },
+      // {
+      //   extend: 'colvis',
+      //   text: ' اخفاء الاعمدة'
+
+      // }
+
+
+    ],
+
+});
+
+// var sourceColumnIndex = -1; // العمود المصدر
+
+// var isMoving = false; // حالة النقل
+
+// var resizing = false; // حالة تغيير الحجم
+
+// // إضافة مقبض تغيير الحجم فقط في رأس العمود
+
+// $('#example1 thead th').each(function (index) {
+
+//   var header = $(this);
+
+//   header.css('position', 'relative');
+
+//   header.append('<div class="resizer"></div>');
+
+//   // تحديد العمود عند النقر
+
+//   header.on('click', function () {
+
+//     if (sourceColumnIndex === index) {
+
+//       // إذا تم النقر على نفس العمود، قم بإلغاء التحديد
+
+//       sourceColumnIndex = -1;
+
+//       $('#example1 thead th').removeClass('selected');
+
+//     } else {
+
+//       // تعيين العمود المصدر
+
+//       sourceColumnIndex = index;
+
+//       $('#example1 thead th').removeClass('selected');
+
+//       header.addClass('selected');
+
+//     }
+
+//   });
+
+//   // التعامل مع سحب العمود
+
+//   header.on('mousedown', function () {
+
+//     resizing = true;
+
+//   });
+
+//   // نقل العمود عند النقر على عمود آخر
+
+//   header.on('mouseup', function () {
+
+//     if (isMoving && sourceColumnIndex !== -1) {
+
+//       var targetColumnIndex = index;
+
+//       if (targetColumnIndex !== sourceColumnIndex) {
+
+//         // تنفيذ عملية النقل
+
+//         var columnData = table.column(sourceColumnIndex).data().toArray();
+
+//         table.column(sourceColumnIndex).data(table.column(targetColumnIndex).data().toArray());
+
+//         table.column(targetColumnIndex).data(columnData);
+
+
+//         // تحديث الجدول
+
+//         table.draw();
+
+//       }
+
+//     }
+
+//   });
+
+//   var resizer = header.find('.resizer');
+
+//   resizer.on('mousedown', function (e) {
+
+//     e.preventDefault();
+
+//     var startX = e.pageX;
+
+//     var startWidth = header.width();
+
+//     $(document).on('mousemove', function (e) {
+
+//       if (resizing) {
+
+//         var newWidth = startWidth + (e.pageX - startX);
+
+//         header.css('min-width', newWidth + 'px');
+
+//       }
+
+//     });
+
+//     $(document).on('mouseup', function () {
+
+//       resizing = false;
+
+//       $(document).off('mousemove');
+
+//       $(document).off('mouseup');
+
+//     });
+
+//   });
+
+// });
+
+// // التحكم في نقل العمود باستخدام لوحة المفاتيح
+
+// $(document).keydown(function (e) {
+
+//   if (sourceColumnIndex !== -1) { // تأكد من تحديد عمود
+
+//     if (e.key === 'n' || e.key === 'N') {
+
+//       // تفعيل وضع النقل
+
+//       isMoving = true;
+
+//       console.log("وضع النقل مفعل. حدد العمود الهدف.");
+
+//     } else if (isMoving && (e.key === 'm' || e.key === 'M')) {
+
+//       // تنفيذ عملية النقل
+
+//       var targetColumnIndex = sourceColumnIndex; // العمود الهدف
+
+//       $('#example1 thead th').each(function (index) {
+
+//         if ($(this).hasClass('selected') && index !== sourceColumnIndex) {
+
+//           targetColumnIndex = index;
+
+//         }
+
+//       });
+
+//       if (targetColumnIndex !== sourceColumnIndex) {
+
+//         // تنفيذ عملية النقل
+
+//         var columnData = table.column(sourceColumnIndex).data().toArray();
+
+//         table.column(sourceColumnIndex).data(table.column(targetColumnIndex).data().toArray());
+
+//         table.column(targetColumnIndex).data(columnData);
+
+
+//         // تحديث الجدول
+
+//         table.draw();
+
+//         sourceColumnIndex = -1; // إلغاء التحديد بعد النقل
+
+//         $('#example1 thead th').removeClass('selected'); // إزالة التحديد
+
+//       }
+
+//       isMoving = false; // إلغاء وضع النقل
+
+//     } else if (e.key === 'ArrowRight') {
+
+//       // زيادة عرض العمود
+
+//       if (sourceColumnIndex !== -1) {
+
+//         var header = $('#example1 thead th').eq(sourceColumnIndex);
+
+//         var newWidth = header.width() + 10; // زيادة 10 بيكسل
+
+//         header.css('min-width', newWidth + 'px');
+
+//       }
+
+//     } else if (e.key === 'ArrowLeft') {
+
+//       // تقليل عرض العمود
+
+//       if (sourceColumnIndex !== -1) {
+
+//         var header = $('#example1 thead th').eq(sourceColumnIndex);
+
+//         var newWidth = header.width() - 10; // تقليل 10 بيكسل
+
+//         if (newWidth > 50) { // تأكد من عدم تقليل العرض لأقل من 50 بيكسل
+
+//           header.css('min-width', newWidth + 'px');
+
+//         }
+
+//       }
+
+//     }
+
+//   }
+
+// });
+
+});
+
+</script>
+
+{% endblock scripts %}

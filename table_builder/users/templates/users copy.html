@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+
+
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.dataTables.min.css' %}">
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="card card-default rounded-0 shadow">
+    <div class="card-header">
+      <div class="d-flex w-100 align-items-center justify-content-between">
+        <!-- <div id="btn">
+          <a href="{% url 'user_action' %}" class="btn btn-custom float-left"
+            id="btn"> حركات المستخدمين </a>
+        </div> -->
+        <div class="float-right">
+          <a href="{% url 'user_action' %}" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-users"></i> حركات المستخدمين
+          </a>
+        </div>
+        <h5 class="box-title titlefix">{{ group }} {% trans 'قائمة المستخدمين' %}</h5>
+        {% if messages %}
+        {% for message in messages %}
+        <script>
+          alert('{{ message }}')
+        </script>
+        {% endfor %}
+        {% endif %}
+        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal-lg">
+          <i class="fa fa-plus-circle"></i>مستخدم جديد
+        </button>
+        <a class="btn btn-outline-primary btn-sm" id="btnbtn" title="الرجوع إلى الصفحة السابقة"
+          href="{% url 'system_manage' %}">
+          رجوع <i class="fas fa-sign-out-alt" style="font-size:24px;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<section>
+  <div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"> مستخدم جديد </h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="">
+            <div class="form-group">
+              {% csrf_token %}
+              {{ form.as_p }}
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button>
+              <input type="submit" class="btn btn-custom" value="حفظ">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="card card-default rounded-0 shadow">
+    <div class="box box-primary" id="sublist">
+      <div class="box-body">
+        <div class="card-body table-responsive p-0">
+          <div class="table-responsive mailbox-messages">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>{% trans "#" %}</th>
+                  <th>{% trans "الاسم كامل" %}</th>
+                  <th>{% trans "اسم المستخدم" %}</th>
+                  <th>{% trans "البريد الالكتروني" %}</th>
+                  <th>{% trans "مجموعة صلاحيات المستخدمين" %}</th>
+                  <th>{% trans "العمليات" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user_data in data %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ user_data.first_name }} {{ user_data.last_name }}</td>
+                  <td>{{ user_data.username }}</td>
+                  <td>{{ user_data.email }}</td>
+                  <td>
+                    {% for user_group in user_data.groups.all %}
+                    {{ user_group }}
+                    <br>
+                    {% endfor %}
+                  </td>
+                  <td class="mailbox-date pull-right no-print">
+                    <a href="{% url 'users_edit' user_data.id %}" class="btn btn-outline-secondary btn-xs"
+                      data-toggle="tooltip" title="{% trans 'تعديل اسم المستخدم' %}">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a href="{% url 'users_edit_password' user_data.id %}" class="btn btn-outline-secondary btn-xs"
+                      data-toggle="tooltip" title="{% trans 'تعديل كلمة السر' %}">
+                      <i class="fa fa-unlock-alt"></i>
+                      <!-- <i class="fa fa-lock"></i> -->
+                      <!-- <i class="fa fa-key"></i> -->
+                    </a>
+                    <a href="{% url 'users_edit_group' user_data.id %}" class="btn btn-outline-secondary btn-xs"
+                      data-toggle="tooltip" title="{% trans 'تعديل القروب' %}">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a href="{% url 'delete_user' user_data.id %}" class="btn btn-outline-danger btn-xs"
+                      data-toggle="tooltip" onclick="return confirm('{   trans هل تريد الاستمرارفي الحذف }')"
+                      title="{% trans 'حذف المستخدم' %}">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-lg">
+          <div class="card-header">
+
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <div class="float-right">
+                <a href="#" class="btn btn-outline-primary btn-sm">
+                  <i class="fa fa-plus-circle"></i> مستخدم جديد
+                </a>
+              </div>
+              <a class="btn btn-outline-primary btn-sm float-left" id="btnbtn" title="الرجوع إلى الصفحة السابقة"
+                href="{% url 'system_manage' %}">
+                رجوع
+                <i class='fas fa-sign-out-alt'></i>
+              </a>
+            </div>
+
+          </div>
+          <div class="card-body">
+            <div class="scrollable-table">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>{% trans "#" %}</th>
+                    <th>{% trans "الاسم كامل" %}</th>
+                    <th>{% trans "اسم المستخدم" %}</th>
+                    <th>{% trans "البريد الالكتروني" %}</th>
+                    <th>{% trans "مجموعة صلاحيات المستخدمين" %}</th>
+                    <th>{% trans "العمليات" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user_data in data %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ user_data.first_name }} {{ user_data.last_name }}</td>
+                    <td>{{ user_data.username }}</td>
+                    <td>{{ user_data.email }}</td>
+                    <td>
+                      {% for user_group in user_data.groups.all %}
+                      {{ user_group }}
+                      <br>
+                      {% endfor %}
+                    </td>
+                    <td class="mailbox-date pull-right no-print">
+                      <a href="{% url 'users_edit' user_data.id %}" class="btn btn-outline-secondary btn-xs"
+                        data-toggle="tooltip" title="{% trans 'تعديل اسم المستخدم' %}">
+                        <i class="fa fa-edit"></i>
+                      </a>
+                      <a href="{% url 'users_edit_password' user_data.id %}" class="btn btn-outline-secondary btn-xs"
+                        data-toggle="tooltip" title="{% trans 'تعديل كلمة السر' %}">
+                        <i class="fa fa-unlock-alt"></i>
+                        <!-- <i class="fa fa-lock"></i> -->
+                        <!-- <i class="fa fa-key"></i> -->
+                        
+  
+  
+                      </a>
+                      <a href="{% url 'users_edit_group' user_data.id %}" class="btn btn-outline-secondary btn-xs"
+                        data-toggle="tooltip" title="{% trans 'تعديل القروب' %}">
+                        <i class="fa fa-edit"></i>
+                      </a>
+                      <a href="{% url 'delete_user' user_data.id %}" class="btn btn-outline-danger btn-xs"
+                        data-toggle="tooltip" onclick="return confirm('{   trans هل تريد الاستمرارفي الحذف }')"
+                        title="{% trans 'حذف المستخدم' %}">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.print.js'%}"></script>
+<script src="{% static 'plugins/jszip/jszip.min.js'%}"></script>
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js'%}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js'%}"></script>
+
+
+<script>
+  $('#example1').DataTable({
+    language: {
+      searching: true,
+      search: "البحث:",
+      emptyTable: "لا توجد بيانات في الجدول",
+      zeroRecords: "لا توجد سجلات مطابقة",
+      info: "إظهار _START_ إلى _END_ من أصل _TOTAL_ سجلات",
+      infoEmpty: "إظهار 0 إلى 0 من أصل 0 سجلات",
+      infoFiltered: "(مفلترة من إجمالي _MAX_ سجل)",
+      lengthMenu: "إظهار _MENU_ إدخالات",
+      paginate: {
+        first: "الأول",
+        last: "الأخير",
+        next: "التالي",
+        previous: "السابق"
+      }
+    }
+  });
+</script>
+<script>
+  $(document).ready(function () {
+
+    var table = $('.user-table').DataTable({
+      "aaSorting": [],
+      "pageLength": 15,
+      "searching": true,
+      // "bProcessing": true,
+      "bServerSide": false,
+      "oLanguages": {
+        oPaginate: {
+          sFirst: '<<',
+          sLast: '>>',
+          sNext: '>',
+          sPrevious: '<',
+
+        },
+        sInfo: '{% trans "Showing _START_ to _END_ of _TOTAL_ entries" %}',
+        sInfoEmpty: '{% trans "No entries to show" %}',
+        sInfoFiltered: '{% trans "(filtered from _MAX_ total entries)" %}',
+        sLengthMenu: '{% trans "Show _MENU_ entries" %}',
+        sProcessing: '{% trans "Processing" %}',
+        sSearch: '{% trans "Filter records:" %}',
+        sZeroRecords: '{% trans "No data to show" %}'
+      },
+
+      responsive: 'true',
+
+      dom: "lftipB",
+      buttons: [
+      ]
+    });
+  });
+</script>
+
+
+{% endblock %}
+
+
+
+<!-- 
+                <div class="card-header border-0">
+                    <form method="post" class="needs-validation" novalidate accept-charset="utf-8">
+                        {% csrf_token %}
+                        <div class="box-body ">
+                            <div class="form-row border border-primary">
+                           
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.first_name }}
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.last_name }}
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.username }}
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.email }}
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.password }}
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.confirm_password }}
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.is_superuser }}
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.is_active }}
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.is_staff }}
+                                </div>
+                              </div>
+                              <div class="col-sm-12">
+                                <div class="form-group">
+                                  
+                                  {% csrf_token %}
+                                  {{ form.groups }}
+                                </div>
+                              </div>
+                             
+
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" id="id_save" class="btn btn-info float-left">حفظ</button>
+                        </div>
+                    </form>
+                </div> -->

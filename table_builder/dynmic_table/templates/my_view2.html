@@ -1,0 +1,156 @@
+
+
+
+
+{% extends 'index.html'%} {% block page_title %}
+<!-- <h5>تعديل البيانات</h5> -->
+
+{% endblock page_title %} {% block content %}
+
+
+<style>
+    /* تخصيص تنسيق الحقول */
+    .form-group {
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-gap: 10px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+
+    /* تخصيص زر الإرسال */
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+
+<form method="POST" action="">
+  <div class="form-group">
+      {% csrf_token %}
+      {{ form.as_p }}
+  </div>
+  <div class="modal-footer justify-content-between">
+    <div>
+      <a href="{% url 'display_data' model_name %}" class="btn btn-block btn-outline-primary btn-sm">   إغلاق</a>
+    </div>
+    <!-- <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button> -->
+    <!-- <input type="submit" value="حفظ"> -->
+  </div>
+</form>
+
+<!-- Modal toggle -->
+<!-- تعديل البيانات -->
+
+
+  <script>
+    tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          primary: {"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"}
+        }
+      },
+      fontFamily: {
+        'body': [
+      'Inter', 
+      'ui-sans-serif', 
+      'system-ui', 
+      '-apple-system', 
+      'system-ui', 
+      'Segoe UI', 
+      'Roboto', 
+      'Helvetica Neue', 
+      'Arial', 
+      'Noto Sans', 
+      'sans-serif', 
+      'Apple Color Emoji', 
+      'Segoe UI Emoji', 
+      'Segoe UI Symbol', 
+      'Noto Color Emoji'
+    ],
+        'sans': [
+      'Inter', 
+      'ui-sans-serif', 
+      'system-ui', 
+      '-apple-system', 
+      'system-ui', 
+      'Segoe UI', 
+      'Roboto', 
+      'Helvetica Neue', 
+      'Arial', 
+      'Noto Sans', 
+      'sans-serif', 
+      'Apple Color Emoji', 
+      'Segoe UI Emoji', 
+      'Segoe UI Symbol', 
+      'Noto Color Emoji'
+    ]
+      }
+    }
+  }
+  </script>
+  
+
+<script>
+  function openFileExplorer() {
+      document.getElementById('fileInput').click();
+  }
+
+  document.getElementById('fileInput').addEventListener('change', function() {
+      var file = this.files[0];
+      var formData = new FormData();
+      formData.append('excel_file', file);
+
+      fetch('/upload_file/', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log(data);
+          alert('تم استيراد البيانات بنجاح!');
+      })
+      .catch(error => {
+          console.error('حدث خطأ: ', error);
+      });
+  });
+</script>
+
+
+
+{% endblock %}
+
+
+
+<!-- <form method="POST" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="حفظ">
+  </form> -->
+

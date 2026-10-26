@@ -1,0 +1,298 @@
+
+
+<h5>إظافة حقل</h5>
+{% block content %}
+
+
+
+
+
+{% if fieldExists %}
+  <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+    <!-- <script>
+      alert('الحقل موجود فعلا');
+
+    </script> -->
+  <strong>عذرا!</strong> {{ field }} 'الحقل موجود فعلا''.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+{% endif %}
+
+  
+<style>
+    /* تخصيص تنسيق الحقول */
+    .form-group {
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-gap: 10px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+
+    /* تخصيص زر الإرسال */
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Large Modal</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Main modal -->
+           <div class="form-group">
+            <form action="" method="post" class="container" id="form" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- <script>
+                  alert('hhhhhhhhh');
+            
+                </script> -->
+                <h2 class='text-center h2text' id="field"> هيكل الحقل 1</h2>
+                    <div class="form-group">
+                  <!-- <input type="text" pattern="[a-zA-Z]+" required="required" name="field1" placeholder="Enter fieldname"/> -->
+                  <input type="text"  required="required" name="field" placeholder=" ادخل اسم الحقل "/>
+                  <label class="control-label" for="input">اسم الحقل</label>
+                        <i class="bar"></i>
+                        <!-- <i class="input-error">ادخل اسم الحقل  </i> -->
+                </div>
+                <div class="form-group">
+                  <select name="datatype" id="datatype" required="required" onchange="handleDataTypeChange()">
+                    <option value="django.db.models.CharField">نص</option>
+                    <option value="django.db.models.TextField">نص طويل</option>
+                    <option value="django.db.models.IntegerField">عدد حقيقي </option>
+                    <option value="django.db.models.FloatField">عدد عشري</option>
+                    <option value="django.db.models.BooleanField">منطقي</option>
+                    <option value="django.db.models.DateTimeField">تاريخ/ وقت</option>
+                    <option value="django.db.models.ForeignKey">علاقة/ربط</option>
+                    <option value="django.db.models.ImageField">صورة</option>
+                  </select>
+                  <label class="control-label" for="select"> اختار نوع الحقل</label><i class="bar"></i>
+                </div>
+                <div class="form-group" id="relatedModel" style="display: none;">
+                  <div class="row">
+                      <div class="col-6 dropdown">
+                          <select name="to" id="to" required="required" aria-label="Default select example">
+                          <option selected>اختار الجدول ؟</option>
+                          {% for model in modelName %}
+                          <option value="{{model.modelnameAr}}">{{ model.modelnameAr }}</option>
+                          {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-6 dropdown">
+                          <select name="relatedField" id="relatedField" required="required" aria-label="Default select example">
+                              <option selected>اختار الحقل ؟</option>
+                          </select>
+                      </div>
+                  </div>
+                </div>
+                <!-- <div class="form-group">
+                    <select name="on_delete" required="required">
+                    <option value="models.CASCADE">CASCADE</option>
+                    <option value="models.PROTICT">PROTICT</option>
+                    </select>
+                    <label class="control-label" for="select">Choose PROTICT or CASCADE?</label><i class="bar"></i>
+                </div> -->
+                <div class="form-group">
+                 <input type="number" min="0" max="6000" required="required" name="maxlen" placeholder="Enter maxlength"/>
+                 <label class="control-label" for="input">اكبر قيمة</label>
+                 <i class="bar"></i>
+                 <i class="input-error">Please enter integer maxlength (0 - 6000)</i>
+                </div>
+                <div class="form-group">
+                  <select name="null" required="required">
+                    <option value="False">لا</option>
+                    <option value="True">نعم</option>
+                  </select>
+                  <label class="control-label" for="select">يقبل قيمة فارغة?</label><i class="bar"></i>
+                </div>
+                <div class="form-group">
+                  <select name="blank" required="required">
+                    <option value="False">لا</option>
+                    <option value="True">نعم</option>
+                  </select>
+                  <label class="control-label" for="select">Choose False or True blank?</label><i class="bar"></i>
+                </div>
+                <div class="form-group">
+                  <select name="unique" required="required">
+                    <option value="False">لا</option>
+                    <option value="True">نعم</option>
+                  </select>
+                  <label class="control-label" for="select">حقل فريد?</label>
+                  <i class="bar"></i>
+                </div>
+                <div class="row" id="buttonArea">
+                  <div class="col-sm-6">
+                    <div class="button-container">
+                      <button class="button" type="submit" style="border-radius:10px;font-size:2rem;"><span><strong>حفظ</strong></span></button>
+                    </div>
+                  </div>
+                </div>
+               
+            </form>
+           </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  <script>
+    document.getElementById('to').addEventListener('change', function() {
+        var selectedTable = this.value;
+    
+        // استدعاء صفحة PHP لاسترداد البيانات
+        fetch('/get_fields/?table=' + selectedTable)
+            .then(response => response.json())
+            .then(data => {
+                var relatedFieldSelect = document.getElementById('relatedField');
+                relatedFieldSelect.innerHTML = ''; // لحذف الخيارات القديمة
+    
+                data.forEach(function(item) {
+                    var option = document.createElement('option');
+                    option.value = item.name;
+                    // alert(item.name)
+                    option.textContent = item.name;
+                    relatedFieldSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('حدث خطأ: ', error));
+    });
+    </script>
+  
+  <script>
+    function handleDataTypeChange() {
+      var datatypeSelect = document.getElementById("datatype");
+      var selectedValue = datatypeSelect.options[datatypeSelect.selectedIndex].value;
+    
+      var relatedModel = document.getElementById("relatedModel");
+      var relatedField = document.getElementById("relatedModelField");
+      if (selectedValue === "django.db.models.ForeignKey") {
+          relatedModel.style.display = "block";
+          relatedField.style.display = "block";
+        // يمكنك هنا تنفيذ الإجراءات اللازمة عندما يتم اختيار "مفتاح ثانوي"
+          // ForeignKey(الجدول الذي تم اختيارة, on_delete=models.CASCADE, related_name='related_table', blank=True, null=True),
+        
+      } else {
+        relatedModel.style.display = "none";
+        relatedField.style.display = "none";
+      }
+    }
+  </script>
+  
+  <!-- <script>
+  document.getElementById('to').addEventListener('change', function() {
+      var selectedTable = this.value;
+  
+      // استدعاء صفحة PHP لاسترداد البيانات
+      fetch('/get_fields/?table=' + selectedTable)
+          .then(response => response.json())
+          .then(data => {
+              var relatedFieldSelect = document.getElementById('relatedField');
+              relatedFieldSelect.innerHTML = ''; // لحذف الخيارات القديمة
+  
+              data.forEach(function(item) {
+                  var option = document.createElement('option');
+                  option.value = item.fieldValue;
+                  option.textContent = item.fieldName;
+                  relatedFieldSelect.appendChild(option);
+              });
+          })
+          .catch(error => console.error('حدث خطأ: ', error));
+  });
+  </script> -->
+  
+
+  <script type="text/javascript">
+    $(function() {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+      });
+  
+      $('.swalDefaultSuccess').click(function() {
+        Toast.fire({
+          type: 'success',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultInfo').click(function() {
+        Toast.fire({
+          type: 'info',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultError').click(function() {
+        Toast.fire({
+          type: 'error',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultWarning').click(function() {
+        Toast.fire({
+          type: 'warning',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultQuestion').click(function() {
+        Toast.fire({
+          type: 'question',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+  
+      $('.toastrDefaultSuccess').click(function() {
+        toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+      });
+      $('.toastrDefaultInfo').click(function() {
+        toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+      });
+      $('.toastrDefaultError').click(function() {
+        toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+      });
+      $('.toastrDefaultWarning').click(function() {
+        toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+      });
+    });
+  
+  </script>
+
+{% endblock %}

@@ -1,0 +1,650 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+
+{% include "header.html" %}
+
+
+
+
+<!-- Bootstrap 4 RTL -->
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+<!-- Custom style for RTL -->
+<link rel="stylesheet" href="{% static 'dist/css/custom.css' %}">
+
+
+
+<style>
+  .content-wrapper {
+    background-image:url("{% static 'img/bg1.jpg' %}");
+    /* background-image:url("{% static 'img/bg1.jpg' %}"); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+  .side1 {
+
+    /* background-image:url('{% static "img/archive.png" %}'); */
+    /* background-repeat: no-repeat; */
+    background-size: cover;
+    background-color: #1e2a3a;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* width: 50%; */
+
+    height: 2em;
+    width: 2em;
+    /* object-fit: cover; */
+    /* object-position: center center; */
+  }
+
+  #txth1 {
+    color: white;
+    /* text-align: center; */
+    padding-right: 400px;
+  }
+
+  #navsystem {
+    background-color: #1e2a3a;
+  }
+
+  #btnhome {
+
+    background-color: rgb(240, 119, 6);
+    border-radius: 5px;
+
+
+  }
+
+  /* تخصيص مظهر النظام */
+  /* .nav-item .nav-link.system-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    font-size: 16px;
+    background-color: #f7f7f7;
+    
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .nav-item .nav-link.system-link:hover {
+    background-color: #1e2a3a;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  } */
+
+  /* تخصيص الأيقونات داخل الرابط */
+  /* .nav-item .nav-link .fa {
+    font-size: 18px;
+    margin-right: 10px;
+    color: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: color 0.3s ease;
+  } */
+
+  /* .nav-item .nav-link:hover .fa {
+    color: #1e2a3a;
+  } */
+
+  /* تخصيص الاسم */
+  .system-name {
+    flex-grow: 1;
+    font-weight: 600;
+    color: #333;
+    text-transform: capitalize;
+  }
+
+  /* تخصيص البادج */
+  .badge-info {
+    background-color: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    margin-left: 10px;
+  }
+
+  /* تخصيص القوائم المتداخلة */
+  /* .nav-treeview {
+    padding-left: 30px;
+    margin-top: 10px;
+  } */
+
+  /* تخصيص الأزرار */
+  /* .btn-outline-success {
+    font-weight: bold;
+    background-color: transparent;
+    color: #28a745;
+    border: 2px solid #28a745;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+    border: 2px solid #28a745;
+  }
+
+  .add-new-btn i {
+    margin-right: 8px;
+  } */
+
+  /* تخصيص الروابط للعرض */
+  /* .nav-item .nav-link.model-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #f0f8ff;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .nav-item .nav-link.model-link:hover {
+    background-color: #d3e5f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  } */
+
+  /* تأثيرات التمرير (Hover effects) */
+  /* .nav-item .nav-link:hover {
+    background-color: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  } */
+
+  /* تخصيص الأيقونات داخل القوائم */
+  .nav-item .nav-link i {
+    font-size: 20px;
+    margin-right: 12px;
+    color: #1e2a3a;
+  }
+
+  /* تحسين عرض القوائم */
+  .nav-treeview .nav-item {
+    margin-bottom: 10px;
+  }
+
+  .btn {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+
+    text-decoration: none;
+    color: #1e2a3a;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .btn:hover {
+    background-color: #34495e;
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  /* تصميم شريط التنقل العلوي */
+  .navbar {
+    background-color: #1e2a3a;
+    /* اللون الأساسي الداكن */
+    overflow: hidden;
+    border-radius: 0 0 10px 10px;
+    height: 5em;
+
+  }
+
+  .badge-info {
+    background-color: #3a4c63;
+    /* اللون الذي تريده هنا */
+  }
+
+  .navbar a {
+    float: right;
+    display: block;
+    color: #fff;
+    text-align: center;
+    padding: 16px 24px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .navbar a:hover {
+    background-color: #3a4c63;
+    /* background-color: #3498db; */
+    color: white;
+  }
+
+  .p {
+    color: black;
+  }
+
+  .nav-link.active {
+
+    background-color: white;
+    /* تعيين خلفية بيضاء */
+    color: #1e2a3a;
+    /* تعيين لون النص إلى اللون الأساسي (اختياري) */
+  }
+
+  .nav-link.active:hover {
+    background-color: #1e2a3a;
+    /* تعيين لون فاتح عند التمرير */
+  }
+
+  /* .nav-link{
+    background-color: #3a4c63;
+
+  } */
+  .thead {
+    background-color: #1e2a3a;
+
+  }
+</style>
+
+<style>
+  /* body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+  } */
+
+  /* .container {
+      max-width: 850px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e1e1e1;
+  } */
+
+  .page-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .form-group input[type="text"]:focus,
+  .form-group input[type="number"]:focus,
+  .form-group select:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  }
+
+  /* تخصيص زر الإرسال */
+  button[type="submit"] {
+    background-color: #1e2a3a;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #45a049;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  #close button {
+    background-color: #fcfaf9;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  /* #close button:hover {
+    background-color: #d32f2f;
+  } */
+
+  
+  /* th,
+  td {
+    text-align: center;
+    padding: 10px;
+  } */
+ /* تخصيص الجدول القابل للتمرير */
+ .scrollable-table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        margin-bottom: 30px;
+    }
+
+    .scrollable-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .scrollable-table th,
+    .scrollable-table td {
+        padding: 14px;
+        text-align: center;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+    /* .scrollable-table th {
+        background-color: #34495e;
+        color: white;
+        font-weight: bold;
+    } */
+
+    /* .scrollable-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .scrollable-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .scrollable-table td:hover {
+        background-color: #ddd;
+    } */
+    .dropdown-content {
+    position: absolute;
+    background-color: #ffffff;
+    /* خلفية بيضاء */
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    /* تأثير ظل ناعم */
+    z-index: 1;
+    padding: 10px 0;
+    border-radius: 6px;
+    /* زاوية دائرية */
+    display: none;
+    border: 1px solid #ddd;
+    /* إضافة حدود خفيفة حول القائمة */
+  }.dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  #btn {
+    margin: 10px 0;
+  }
+
+</style>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  {% if messages %}
+    <div class="alert-container">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div class="wrapper">
+
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar">
+        <li>
+          <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+        </li>
+        <a href="{% url 'index' %}"> الصفحةالرئيسية</a>
+        <a href="{% url 'system_manage' %}"> إدارة النظام</a>
+       
+          <a href="{% url 'roles' %}">المجموعات</a>
+        
+          <a href="{% url 'roles2' %}" >صلاحيات الانظمة</a>
+        
+          <a href="{% url 'users' %}" >المستخدمين</a>
+        
+          <a href="{% url 'subprojects_manage' %}">الأنظمة</a>
+        
+          <a href="{% url 'custm_report_header_edit' %}">التقارير</a>
+      </ul>
+      <!-- Right navbar links -->
+      <ul class="navbar-nav mr-auto-navbav">
+        <li class="nav-item">
+
+          {% if user.is_authenticated %}
+          <a href="{% url 'logout' %}" role="button"
+            onclick="return confirm('هل تريد الخروج حقا');"><i class="fas fa-sign-out-alt"
+              ></i>خروج</a>
+          {% else %}
+          <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Sign in</a>
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <aside class="main-sidebar bg-light elevation-4">
+
+      <a href="{% url 'index' %}" class="brand-link">
+
+        <img src="#" alt="" class="brand-image img-circle elevation-3" style="opacity: .8">
+      </a>
+
+
+      <!-- Main Sidebar Container -->
+      <aside class="main-sidebar sidebar primary elevation-4">
+        <!-- <aside class="main-sidebar sidebar-dark-primary elevation-4"> -->
+
+        <!-- Brand Logo -->
+        <!-- <a href="#" class="brand-link">
+      <img src="#" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text font-weight-light">AdminLTE 3</span>
+    </a> -->
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <!-- Sidebar user panel (optional) -->
+          <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="#" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">Alexander Pierce</a>
+        </div>
+      </div> -->
+
+          <!-- Sidebar Menu -->
+          <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+              <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+              <li class="nav-item has-treeview menu-open">
+                <a href="{% url 'index' %}" class="nav-link active">
+                  <!-- <i class="nav-icon fas fa-tachometer-alt"></i> -->
+                  <p>
+                    {{user.username}}
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+               
+
+              </li>
+              {% for system in systems %}
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="fa fa-server nav-icon"></i>
+                  <p class="p">
+                    {{ system.name }}
+                    <i class="fas fa-angle-left right"></i>
+                    <span class="badge badge-info right">{{ system.id }}</span>
+                  </p>
+                </a>
+                <!-- <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'create_models' sys_name_id=system.id %}"
+                      class="btn btn-block btn-outline-primary btn-sm">
+                      <i class="fa fa-plus-circle"></i>
+                      جدول جديد
+                    </a>
+                  </li>
+                </ul> -->
+
+                {% for model in models %}
+                {% if system.id == model.sys_name_id %}
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'display_data' model.modelname system.id %}" class="btn btn-block btn-outline-primary btn-sm">
+                      <i class="fa fa-laptop nav-icon"></i>
+                      {{ model.modelnameAr }}
+                    </a>
+                  </li>
+                </ul>
+                {% endif %}
+                {% endfor %}
+              </li>
+              {% endfor %}
+
+            </ul>
+          </nav>
+          <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+      </aside>
+
+
+
+
+
+    </aside>
+
+
+    <div class="content-wrapper">
+
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0 text-dark">
+                {% block title %}
+                {% endblock title %}
+              </h1>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <section>
+        <div class="modal fade" id="modal-lg">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title"> إظافة نظام </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Main modal -->
+                <form method="POST" action="">
+                  <div class="form-group">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                  </div>
+
+                  <div class="modal-footer justify-content-between">
+                    <!-- <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button> -->
+                    <!-- <input type="submit" value="حفظ"> -->
+                    <button type="submit">حفظ</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+      </section>
+
+
+      <section class="content">
+        <div class="container-fluid">
+
+
+          {% block content %}
+
+          {% endblock content %}
+
+
+
+        </div>
+      </section>
+    </div>
+
+    <footer class="main-footer no-print">
+      <!-- <strong>   &copy; <a href="#">ادارة المهام</a></strong>
+          2022-2022 .  -->
+      <div class="float-right d-none d-sm-inline-block ">
+        <!-- <b>الاصدار</b> 1.0.0 -->
+        <span class="brand-text font-weight-light"> المستخدم الحالي : {{request.user}}</span>
+      </div>
+    </footer>
+
+
+    <aside class="control-sidebar control-sidebar-dark">
+
+    </aside>
+
+  </div>
+
+
+  {% include "footer.html" %}
+  {% block scripts %}
+
+  {% endblock scripts %}
+</body>
+
+</html>

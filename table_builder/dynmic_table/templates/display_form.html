@@ -1,0 +1,88 @@
+{% extends 'index.html'%} 
+{% block page_title %}
+{% endblock page_title %} 
+{% block content %}
+
+
+<h5>بيانات  جديدة</h5>
+
+<h5> {{model_name}} </h5>
+<h5> {{model_name}} </h5>
+
+
+
+
+
+<style>
+    /* تخصيص تنسيق الحقول */
+    .form-group {
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-gap: 10px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+
+    /* تخصيص زر الإرسال */
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<!-- إظافة بيانات -->
+
+<div class="modal-body">
+    <!-- Main modal -->
+    <form method="POST" action="">
+        <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </div>
+        <div class="modal-footer justify-content-between">
+            <div>
+                <a href="{% url 'display_data' model_name %}" class="btn btn-block btn-outline-primary btn-sm">   إغلاق</a>
+            </div>
+            <!-- <button type="button" class="btn btn-block btn-outline-primary btn-sm" data-dismiss="modal">إغلاق</button> -->
+            <button type="submit" class="btn btn-block btn-outline-primary btn-sm" data-dismiss="modal">حفظ</button>
+                <!-- <input type="submit" value="حفظ"> -->
+
+        </div>
+  </form>
+</div>
+
+<!-- <form method="POST" action="">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="حفظ">
+</form> -->
+
+
+{% endblock %} 
+
+
+
+

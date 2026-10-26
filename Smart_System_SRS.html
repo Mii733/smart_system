@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وثيقة متطلبات هندسة البرمجيات - مشروع Smart System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Arabic Typesetting', Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 210mm;
+            height: 297mm;
+            background-color: white;
+            margin: 0 auto 20px;
+            padding: 2cm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .document-header {
+            text-align: center;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            page-break-after: avoid;
+        }
+
+        .document-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .document-subtitle {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .document-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 12px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            gap: 5px;
+        }
+
+        .meta-label {
+            font-weight: bold;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+
+        .toc-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .toc-list {
+            list-style: none;
+            columns: 2;
+            column-gap: 30px;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .toc-list a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        /* Section Styles */
+        h1 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            page-break-after: avoid;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            border-right: 4px solid #3498db;
+            padding-right: 10px;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 15px;
+            color: #555;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            page-break-after: avoid;
+        }
+
+        /* Paragraph Styles */
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+            font-size: 13px;
+        }
+
+        /* List Styles */
+        ul, ol {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 12px;
+            page-break-inside: avoid;
+        }
+
+        table th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: right;
+            font-weight: bold;
+            border: 1px solid #2c3e50;
+        }
+
+        table td {
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            text-align: right;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #ecf0f1;
+        }
+
+        table tr:hover {
+            background-color: #d5dbdb;
+        }
+
+        /* Blockquote Styles */
+        blockquote {
+            border-right: 4px solid #3498db;
+            padding-right: 15px;
+            margin-right: 0;
+            margin-bottom: 15px;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-style: italic;
+            color: #555;
+        }
+
+        /* Code/Pre Styles */
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 11px;
+            page-break-inside: avoid;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            background-color: #ecf0f1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        /* Box Styles */
+        .info-box {
+            background-color: #d6eaf8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+            page-break-inside: avoid;
+        }
+
+        .warning-box {
+            background-color: #fadbd8;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+            page-break-inside: avoid;
+        }
+
+        .success-box {
+            background-color: #d5f4e6;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+            page-break-inside: avoid;
+        }
+
+        /* Image Styles */
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 15px 0;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            page-break-inside: avoid;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* Requirement Box */
+        .requirement {
+            background-color: #f9f9f9;
+            border-left: 4px solid #9b59b6;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            page-break-inside: avoid;
+        }
+
+        .requirement-id {
+            font-weight: bold;
+            color: #9b59b6;
+        }
+
+        /* Footer */
+        .document-footer {
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px solid #bdc3c7;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            page-break-before: avoid;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+                padding: 2cm;
+                max-width: 100%;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            h2 {
+                font-size: 16px;
+            }
+            p, li {
+                font-size: 12px;
+            }
+        }
+
+        /* Mermaid Diagram Styles */
+        .diagram-container {
+            text-align: center;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+
+        .diagram-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        /* Horizontal Line */
+        hr {
+            border: none;
+            border-top: 2px solid #bdc3c7;
+            margin: 30px 0;
+            page-break-after: avoid;
+        }
+
+        /* Highlight */
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* Strong emphasis */
+        strong {
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        /* Section Number */
+        .section-number {
+            color: #3498db;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Document Header -->
+        <div class="document-header">
+            <div class="document-title">وثيقة متطلبات هندسة البرمجيات (SRS)</div>
+            <div class="document-subtitle">مشروع Smart System - "مصنع الأنظمة الذكي"</div>
+            <div class="document-meta">
+                <div class="meta-item">
+                    <span class="meta-label">تاريخ الإصدار:</span>
+                    <span>8 يوليو 2026</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">المؤلف:</span>
+                    <span>Manus AI</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">الإصدار:</span>
+                    <span>1.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <div class="toc-title">جدول المحتويات</div>
+            <ul class="toc-list">
+                <li><a href="#section1">1. المقدمة</a></li>
+                <li><a href="#section2">2. الوصف العام</a></li>
+                <li><a href="#section3">3. المتطلبات الوظيفية</a></li>
+                <li><a href="#section4">4. المتطلبات غير الوظيفية</a></li>
+                <li><a href="#section5">5. الهيكل المعماري</a></li>
+                <li><a href="#section6">6. تصميم قاعدة البيانات</a></li>
+                <li><a href="#section7">7. خريطة الطريق</a></li>
+                <li><a href="#section8">8. إدارة المخاطر</a></li>
+                <li><a href="#section9">9. التوصيات النهائية</a></li>
+                <li><a href="#section10">10. المراجع</a></li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <!-- Section 1: Introduction -->
+        <h1 id="section1"><span class="section-number">1.</span> المقدمة</h1>
+
+        <h2>1.1 الغرض من الوثيقة</h2>
+        <p>تهدف هذه الوثيقة إلى تحديد المتطلبات الوظيفية وغير الوظيفية، والهيكل المعماري، ومنطق العمل لمشروع <strong>Smart System</strong>، والذي يمثل منصة متقدمة لإنشاء الأنظمة الفرعية وتطبيقات إدارة البيانات بدون الحاجة إلى كتابة كود برمجي (No-Code System Builder).</p>
+        <p>ستكون هذه الوثيقة بمثابة مرجع أساسي لجميع أصحاب المصلحة، بما في ذلك المطورين، مديري المشاريع، والمستخدمين النهائيين، لضمان فهم مشترك لأهداف المشروع ونطاقه.</p>
+
+        <h2>1.2 نطاق المشروع</h2>
+        <p>يركز مشروع Smart System على توفير بيئة متكاملة للمستخدمين لتعريف وتكوين أنظمة بيانات مخصصة، شاشات إدخال، وعمليات ربط، مع التركيز على المرونة، السرعة، وقابلية التوسع. يهدف النظام إلى تحويل عملية بناء التطبيقات من عملية برمجية معقدة إلى عملية تعريف بيانات بسيطة، مع توليد الواجهات ومنطق العمل آلياً.</p>
+
+        <h2>1.3 الجمهور المستهدف</h2>
+        <ul>
+            <li><strong>أصحاب المشاريع:</strong> لفهم الرؤية الاستراتيجية والعائد الاستثماري.</li>
+            <li><strong>المطورون:</strong> لتوجيه عملية التطوير والتنفيذ التقني.</li>
+            <li><strong>مديرو المنتجات:</strong> لتحديد أولويات الميزات وتخطيط الإصدارات.</li>
+            <li><strong>المستخدمون النهائيون:</strong> لفهم قدرات النظام وكيفية استخدامه.</li>
+        </ul>
+
+        <hr>
+
+        <!-- Section 2: General Description -->
+        <h1 id="section2"><span class="section-number">2.</span> الوصف العام</h1>
+
+        <h2>2.1 رؤية المنتج</h2>
+        <p>أن يصبح Smart System المنصة الرائدة في العالم العربي لإنشاء تطبيقات إدارة البيانات والأنظمة الفرعية المخصصة بدون كود، مما يمكن الشركات الصغيرة والمتوسطة من رقمنة عملياتها بسرعة وكفاءة عالية، وتقليل الاعتماد على فرق التطوير الكبيرة.</p>
+
+        <h2>2.2 الوظائف الرئيسية</h2>
+        <ul>
+            <li><strong>إنشاء وإدارة الأنظمة الفرعية:</strong> القدرة على تعريف أنظمة فرعية متعددة، كل منها يمثل مشروعاً مستقلاً ببياناته وصلاحياته.</li>
+            <li><strong>توليد الشاشات الديناميكية:</strong> تمكين المستخدم من تصميم شاشات إدخال البيانات وتحديد أنواع وعدد الحقول.</li>
+            <li><strong>محرك توزيع الحقول الذكي ("الدوّارة"):</strong> آلية تلقائية لتوزيع الحقول داخل الشاشات بناءً على مواقع محددة مسبقاً.</li>
+            <li><strong>إدارة الحقول المخصصة:</strong> تعريف خصائص الحقول، بما في ذلك التسميات العربية، وأنواع البيانات، والعلاقات.</li>
+            <li><strong>ربط العمليات ومزامنة البيانات:</strong> القدرة على تعريف علاقات بين العمليات المختلفة.</li>
+            <li><strong>إدارة التراميز:</strong> توفير آليات لتعريف القوائم المنسدلة والبيانات المرجعية.</li>
+            <li><strong>التقارير المخصصة:</strong> إنشاء رؤوس تقارير قابلة للتخصيص.</li>
+            <li><strong>الاستيراد والتصدير:</strong> دعم استيراد البيانات من ملفات Excel وتصديرها إليها.</li>
+            <li><strong>إدارة الصلاحيات:</strong> نظام صلاحيات مرن يعتمد على الأنظمة الفرعية والمستخدمين.</li>
+        </ul>
+
+        <h2>2.3 خصائص المستخدمين</h2>
+        <ul>
+            <li><strong>المسؤول (Admin):</strong> إدارة كاملة للنظام، بما في ذلك إنشاء الأنظمة الفرعية، المستخدمين، والصلاحيات.</li>
+            <li><strong>مصمم النظام (System Designer):</strong> إنشاء وتعديل الشاشات، الحقول، والعمليات داخل الأنظمة الفرعية.</li>
+            <li><strong>مدخل البيانات (Data Entry User):</strong> إدخال وتعديل وعرض البيانات ضمن الشاشات المحددة له.</li>
+        </ul>
+
+        <hr>
+
+        <!-- Section 3: Functional Requirements -->
+        <h1 id="section3"><span class="section-number">3.</span> المتطلبات الوظيفية</h1>
+
+        <h2>3.1 إدارة الأنظمة الفرعية</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-1.1:</span> يجب أن يسمح النظام للمسؤول بإنشاء نظام فرعي جديد (TblSystem) بتحديد اسمه.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-1.2:</span> يجب أن يسمح النظام للمسؤول بتعديل وحذف الأنظمة الفرعية الموجودة.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-1.3:</span> يجب أن يعرض النظام قائمة بالأنظمة الفرعية المتاحة للمستخدم بناءً على صلاحياته.
+        </div>
+
+        <h2>3.2 توليد الشاشات الديناميكية</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-2.1:</span> يجب أن يسمح النظام لمصمم النظام بإنشاء شاشة جديدة (Modelnames) داخل نظام فرعي محدد.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-2.2:</span> يجب أن يسمح النظام لمصمم النظام بتحديد اسم الشاشة (بالعربية والإنجليزية) ونوع النموذج (model_type).
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-2.3:</span> يجب أن يقوم النظام بتوليد جدول قاعدة بيانات ديناميكي للشاشة الجديدة بناءً على الحقول المعرفة.
+        </div>
+
+        <h2>3.3 إدارة الحقول المخصصة</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-3.1:</span> يجب أن يسمح النظام لمصمم النظام بإضافة حقول مخصصة (CustomField) إلى الشاشات الديناميكية.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-3.2:</span> يجب أن يدعم النظام أنواع بيانات مختلفة للحقول (نص، رقم، تاريخ، قائمة منسدلة، علاقة).
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-3.3:</span> يجب أن يسمح النظام بتحديد التسمية العربية للحقل (verbose_name) واسم العمود في قاعدة البيانات (field_name).
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-3.4:</span> يجب أن يدعم النظام إنشاء علاقات بين الحقول الديناميكية (ForeignKey, ManyToMany).
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-3.5:</span> يجب أن يقوم النظام بتحديث هيكل قاعدة البيانات تلقائياً عند إضافة أو تعديل الحقول.
+        </div>
+
+        <h2>3.4 محرك توزيع الحقول ("الدوّارة")</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-4.1:</span> يجب أن يسمح النظام لمصمم النظام بتحديد "مواقع الحقول" (Locations) داخل الشاشة كإحداثيات أو مناطق محددة.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-4.2:</span> يجب أن يقوم النظام بتطبيق منطق "الدوّارة" لتوزيع عناصر التحكم آلياً في الواجهة الأمامية.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-4.3:</span> يجب أن يكون منطق التوزيع مرناً وقابلاً للتخصيص ليتناسب مع تصميم الواجهة.
+        </div>
+
+        <h2>3.5 إدارة العمليات وربطها</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-5.1:</span> يجب أن يسمح النظام لمصمم النظام بتعريف عمليات جديدة (Processes) داخل الشاشات.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-5.2:</span> يجب أن يسمح النظام بربط العمليات ببعضها البعض (Process Linking).
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-5.3:</span> يجب أن يدعم النظام مزامنة البيانات بين العمليات المرتبطة آلياً.
+        </div>
+
+        <h2>3.6 إدارة التراميز</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-6.1:</span> يجب أن يسمح النظام بتعريف جداول التراميز (Coding/Lookups) لاستخدامها كقوائم منسدلة.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-6.2:</span> يجب أن يسمح النظام بربط حقول التراميز بحقول معينة في الشاشات الديناميكية.
+        </div>
+
+        <h2>3.7 إدخال وعرض البيانات</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-7.1:</span> يجب أن يوفر النظام واجهات CRUD (إنشاء، قراءة، تحديث، حذف) للبيانات المدخلة.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-7.2:</span> يجب أن يقوم النظام بتسجيل أفعال المستخدم (UserAction) مع طابع زمني.
+        </div>
+
+        <h2>3.8 التقارير والاستيراد/التصدير</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-8.1:</span> يجب أن يسمح النظام بتعريف رؤوس تقارير مخصصة (CustmReportHeader).
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-8.2:</span> يجب أن يدعم النظام تصدير قالب Excel فارغ للشاشات الديناميكية.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-8.3:</span> يجب أن يدعم النظام استيراد البيانات من ملفات Excel مع آلية لربط الأعمدة بالحقول.
+        </div>
+
+        <h2>3.9 إدارة الصلاحيات</h2>
+        <div class="requirement">
+            <span class="requirement-id">FR-9.1:</span> يجب أن يوفر النظام نظام صلاحيات دقيق يعتمد على المستخدم، الدور، والنظام الفرعي.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">FR-9.2:</span> يجب أن يتمكن المسؤول من تحديد صلاحيات الوصول (عرض، إضافة، تعديل، حذف).
+        </div>
+
+        <hr>
+
+        <!-- Section 4: Non-Functional Requirements -->
+        <h1 id="section4"><span class="section-number">4.</span> المتطلبات غير الوظيفية</h1>
+
+        <h2>4.1 الأداء (Performance)</h2>
+        <div class="requirement">
+            <span class="requirement-id">NFR-1.1:</span> يجب أن يتم تحميل الشاشات الديناميكية في أقل من 2 ثانية لمعظم حالات الاستخدام.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-1.2:</span> يجب أن تتم عمليات حفظ البيانات واسترجاعها في أقل من 1 ثانية.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-1.3:</span> يجب أن يدعم النظام ما لا يقل عن 100 مستخدم متزامن دون تدهور ملحوظ في الأداء.
+        </div>
+
+        <h2>4.2 قابلية التوسع (Scalability)</h2>
+        <div class="requirement">
+            <span class="requirement-id">NFR-2.1:</span> يجب أن يكون النظام قادراً على دعم آلاف الأنظمة الفرعية وعشرات الآلاف من الشاشات والحقول الديناميكية.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-2.2:</span> يجب أن يكون تصميم قاعدة البيانات قابلاً للتوسع أفقياً وعمودياً.
+        </div>
+
+        <h2>4.3 الأمان (Security)</h2>
+        <div class="requirement">
+            <span class="requirement-id">NFR-3.1:</span> يجب أن يطبق النظام آليات مصادقة وتفويض قوية (Authentication & Authorization).
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-3.2:</span> يجب أن يتم تشفير جميع البيانات الحساسة أثناء النقل والتخزين.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-3.3:</span> يجب أن يكون النظام محصناً ضد الثغرات الأمنية الشائعة (SQL Injection, XSS).
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-3.4:</span> يجب أن يتم تسجيل جميع أفعال المستخدمين الهامة لأغراض التدقيق.
+        </div>
+
+        <h2>4.4 قابلية الاستخدام (Usability)</h2>
+        <div class="requirement">
+            <span class="requirement-id">NFR-4.1:</span> يجب أن تكون واجهة المستخدم بديهية وسهلة التعلم.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-4.2:</span> يجب أن يوفر النظام رسائل خطأ واضحة ومفيدة.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-4.3:</span> يجب أن يدعم النظام اللغة العربية بشكل كامل في الواجهة والبيانات.
+        </div>
+
+        <h2>4.5 قابلية الصيانة (Maintainability)</h2>
+        <div class="requirement">
+            <span class="requirement-id">NFR-5.1:</span> يجب أن يكون الكود المصدري منظماً، موثقاً، وسهل الفهم.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-5.2:</span> يجب أن يعتمد النظام على معايير وأطر عمل معروفة وموثوقة (مثل Django).
+        </div>
+
+        <h2>4.6 قابلية الاعتمادية (Reliability)</h2>
+        <div class="requirement">
+            <span class="requirement-id">NFR-6.1:</span> يجب أن يكون النظام متاحاً بنسبة 99.9% من الوقت.
+        </div>
+        <div class="requirement">
+            <span class="requirement-id">NFR-6.2:</span> يجب أن يوفر النظام آليات للنسخ الاحتياطي واستعادة البيانات.
+        </div>
+
+        <hr>
+
+        <!-- Section 5: Architecture -->
+        <h1 id="section5"><span class="section-number">5.</span> الهيكل المعماري المقترح</h1>
+
+        <h2>5.1 نظرة عامة على الهيكل</h2>
+        <p>يعتمد الهيكل المعماري المقترح على بنية ثلاثية الطبقات (3-Tier Architecture) مع التركيز على فصل الاهتمامات (Separation of Concerns) والمرونة في التعامل مع البيانات الديناميكية.</p>
+
+        <h3>طبقة العرض (Presentation Layer)</h3>
+        <p>واجهة المستخدم (Frontend) التي يتفاعل معها المستخدمون لإنشاء الأنظمة، الشاشات، وإدخال البيانات. ستكون مبنية على قوالب Django مع AdminLTE، ويمكن تطويرها مستقبلاً باستخدام أطر عمل JavaScript حديثة (مثل React أو Vue.js).</p>
+
+        <h3>طبقة منطق الأعمال (Business Logic Layer)</h3>
+        <p>الجزء الخلفي (Backend) المسؤول عن معالجة الطلبات، تطبيق قواعد العمل، وإدارة التفاعل مع قاعدة البيانات. سيتم تطويره باستخدام Django و Python.</p>
+
+        <h3>طبقة البيانات (Data Layer)</h3>
+        <p>قاعدة البيانات PostgreSQL التي تخزن جميع بيانات النظام، بما في ذلك تعريفات الأنظمة، الشاشات، الحقول، البيانات الديناميكية، والصلاحيات.</p>
+
+        <h2>5.2 مكونات النظام الرئيسية</h2>
+        <ul>
+            <li><strong>محرك النماذج الديناميكية (Dynamic Model Engine):</strong> المكون الأساسي المسؤول عن توليد جداول قاعدة البيانات ونماذج Django في وقت التشغيل.</li>
+            <li><strong>محرك الواجهة الديناميكية (Dynamic UI Engine - "الدوّارة"):</strong> المكون المسؤول عن قراءة تعريفات الشاشات ومواقع الحقول، ثم توليد واجهة المستخدم ديناميكياً.</li>
+            <li><strong>محرك الصلاحيات (Authorization Engine):</strong> نظام متكامل لإدارة الصلاحيات على مستوى الأنظمة الفرعية، الشاشات، والعمليات.</li>
+            <li><strong>محرك التقارير (Reporting Engine):</strong> مكون لتوليد التقارير المخصصة بناءً على البيانات الديناميكية.</li>
+            <li><strong>محرك الاستيراد/التصدير (Import/Export Engine):</strong> للتعامل مع ملفات Excel.</li>
+        </ul>
+
+        <hr>
+
+        <!-- Section 6: Database Design -->
+        <h1 id="section6"><span class="section-number">6.</span> تصميم قاعدة البيانات</h1>
+
+        <h2>6.1 الجداول المقترحة</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>اسم الجدول</th>
+                    <th>الأعمدة المقترحة</th>
+                    <th>ملاحظات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>tbl_systems</code></td>
+                    <td><code>system_id (PK), system_name</code></td>
+                    <td>لتعريف الأنظمة الفرعية.</td>
+                </tr>
+                <tr>
+                    <td><code>tbl_screens</code></td>
+                    <td><code>screen_id (PK), system_id (FK), screen_name_ar, screen_name_en, num_date_fields, num_numeric_fields, num_text_fields, field_locations_json</code></td>
+                    <td><code>field_locations_json</code> لتخزين مواقع الحقول كـ JSON Array.</td>
+                </tr>
+                <tr>
+                    <td><code>tbl_processes</code></td>
+                    <td><code>process_id (PK), screen_id (FK), system_id (FK), field1_data, field2_data, ...</code></td>
+                    <td>لتخزين البيانات الفعلية لكل عملية.</td>
+                </tr>
+                <tr>
+                    <td><code>tbl_process_linking</code></td>
+                    <td><code>link_id (PK), process1_id (FK), process2_id (FK), screen_id (FK)</code></td>
+                    <td>لربط العمليات ببعضها.</td>
+                </tr>
+                <tr>
+                    <td><code>tbl_lookups</code></td>
+                    <td><code>lookup_id (PK), lookup_name, lookup_values_json</code></td>
+                    <td>لتخزين التراميز كـ JSON Array.</td>
+                </tr>
+                <tr>
+                    <td><code>tbl_custom_fields</code></td>
+                    <td><code>field_id (PK), model_name_id (FK), field_name, verbose_name_ar, field_type, is_related, related_table, related_name</code></td>
+                    <td>لتعريف الحقول المخصصة وخصائصها.</td>
+                </tr>
+                <tr>
+                    <td><code>tbl_user_actions</code></td>
+                    <td><code>action_id (PK), user_id (FK), action_type, timestamp, details_json</code></td>
+                    <td>لتسجيل أفعال المستخدمين.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>6.2 العلاقات بين الجداول</h2>
+        <ul>
+            <li><code>tbl_screens.system_id</code> → <code>tbl_systems.system_id</code> (One-to-Many)</li>
+            <li><code>tbl_processes.screen_id</code> → <code>tbl_screens.screen_id</code> (One-to-Many)</li>
+            <li><code>tbl_processes.system_id</code> → <code>tbl_systems.system_id</code> (One-to-Many)</li>
+            <li><code>tbl_process_linking.process1_id</code> → <code>tbl_processes.process_id</code> (Many-to-Many)</li>
+            <li><code>tbl_process_linking.process2_id</code> → <code>tbl_processes.process_id</code> (Many-to-Many)</li>
+            <li><code>tbl_custom_fields.model_name_id</code> → <code>tbl_screens.screen_id</code> (One-to-Many)</li>
+        </ul>
+
+        <hr>
+
+        <!-- Section 7: Roadmap -->
+        <h1 id="section7"><span class="section-number">7.</span> خريطة الطريق المقترحة</h1>
+
+        <h2>7.1 المرحلة الأولى (الأشهر 1-3): تثبيت الأساس ومحرك الدوّارة</h2>
+        <h3>الشهر الأول</h3>
+        <ul>
+            <li>تنظيف الكود الحالي، توحيد دوال إنشاء النماذج الديناميكية.</li>
+            <li>بناء مجموعة اختبارات أساسية للوظائف الرئيسية.</li>
+            <li>تثبيت وتطوير محرك "الدوّارة" لتوزيع الحقول.</li>
+        </ul>
+
+        <h3>الشهر الثاني</h3>
+        <ul>
+            <li>إزالة الاعتماد على <code>inspectdb</code> كآلية إنتاجية.</li>
+            <li>جعل <code>tbl_screens</code> و <code>tbl_custom_fields</code> المصدر الوحيد للحقيقة.</li>
+            <li>توثيق قاعدة البيانات ومخطط العلاقات بشكل كامل.</li>
+        </ul>
+
+        <h3>الشهر الثالث</h3>
+        <ul>
+            <li>تحسين واجهات المستخدم لإنشاء وإدارة الشاشات والحقول.</li>
+            <li>إضافة استعراض فوري للعلاقات بين الحقول.</li>
+            <li>تطوير <code>tbl_process_linking</code> ليعمل بشكل فعال.</li>
+        </ul>
+
+        <h2>7.2 المرحلة الثانية (الأشهر 4-6): التقارير، الصلاحيات، والاستقرار</h2>
+        <ul>
+            <li><strong>الشهر الرابع:</strong> تطوير <code>FieldCondition</code> وبناء لوحة تقارير قابلة للتخصيص.</li>
+            <li><strong>الشهر الخامس:</strong> اختبار الأذونات بشكل كامل وتأمين محركات SQL.</li>
+            <li><strong>الشهر السادس:</strong> تطوير تغطية اختبارات الوحدات والنهايات وإعداد CI/CD.</li>
+        </ul>
+
+        <h2>7.3 المرحلة الثالثة (الأشهر 7-12): النشر، التوسع، والوظائف المتقدمة</h2>
+        <ul>
+            <li><strong>الشهر السابع:</strong> نشر أول نسخة تجريبية.</li>
+            <li><strong>الشهر الثامن:</strong> معالجة المشكلات المستلمة من المستخدمين.</li>
+            <li><strong>الشهر التاسع:</strong> إضافة واجهة API (REST أو GraphQL).</li>
+            <li><strong>الشهر العاشر:</strong> بناء محتوى شرح استخدام المنتج.</li>
+            <li><strong>الشهر الحادي عشر:</strong> ضبط خطة التسعير وتجهيز دعم فني.</li>
+            <li><strong>الشهر الثاني عشر:</strong> إصدار أول نسخة رسمية.</li>
+        </ul>
+
+        <hr>
+
+        <!-- Section 8: Risk Management -->
+        <h1 id="section8"><span class="section-number">8.</span> إدارة المخاطر والعوائق</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>المخاطرة/العائق</th>
+                    <th>السبب المحتمل</th>
+                    <th>الحل المقترح</th>
+                    <th>تحويلها لفرصة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>التعقيد التقني</strong></td>
+                    <td>الاعتماد على <code>inspectdb</code>، تكرار الكود</td>
+                    <td>إعادة بناء المحرك الديناميكي بشكل نظيف</td>
+                    <td>فرصة لبناء محرك No-Code فريد</td>
+                </tr>
+                <tr>
+                    <td><strong>الأداء</strong></td>
+                    <td>استعلامات قاعدة البيانات غير المحسنة</td>
+                    <td>تحسين الاستعلامات وإضافة فهارس مخصصة</td>
+                    <td>نظام عالي الأداء يجذب عملاء محترفين</td>
+                </tr>
+                <tr>
+                    <td><strong>الأمان</strong></td>
+                    <td>ثغرات محتملة في توليد الكود الديناميكي</td>
+                    <td>تطبيق مبادئ الأمان من التصميم</td>
+                    <td>حل آمن وموثوق للتطبيقات الحساسة</td>
+                </tr>
+                <tr>
+                    <td><strong>قابلية الاستخدام</strong></td>
+                    <td>تعقيد واجهة المستخدم</td>
+                    <td>تصميم UI/UX بديهية وتوفير أدوات مساعدة</td>
+                    <td>تجربة مستخدم استثنائية</td>
+                </tr>
+                <tr>
+                    <td><strong>التسويق</strong></td>
+                    <td>عدم وضوح القيمة المضافة</td>
+                    <td>تحديد شريحة سوقية مستهدفة بدقة</td>
+                    <td>علامة تجارية قوية في سوق الـ No-Code</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <!-- Section 9: Recommendations -->
+        <h1 id="section9"><span class="section-number">9.</span> التوصيات النهائية</h1>
+
+        <div class="success-box">
+            <strong>للمطورين:</strong> التركيز على إعادة هيكلة محرك النماذج الديناميكية ليكون مستقلاً عن <code>inspectdb</code>، وتوحيد جميع دوال توليد الكود الديناميكي في مكان واحد. استخدام أطر عمل الواجهة الأمامية الحديثة (مثل React/Vue) لتنفيذ منطق "الدوّارة" بشكل احترافي.
+        </div>
+
+        <div class="info-box">
+            <strong>لمديري المنتجات:</strong> تحديد أولويات الميزات بناءً على القيمة التجارية القصوى، والبدء بنسخة MVP تركز على حل مشكلة واحدة بامتياز قبل التوسع.
+        </div>
+
+        <div class="warning-box">
+            <strong>لصاحب المشروع:</strong> التركيز على بناء مجتمع مستخدمين نشط، وجمع الملاحظات باستمرار لتحسين المنتج. استغلال قوة الذكاء الاصطناعي كشريك استراتيجي في كل مراحل التطوير.
+        </div>
+
+        <hr>
+
+        <!-- Section 10: References -->
+        <h1 id="section10"><span class="section-number">10.</span> المراجع</h1>
+
+        <ol>
+            <li>تقرير التحليل الأولي لمشروع Smart System (ملف <code>pasted_content.txt</code>).</li>
+            <li>تحليل هيكلية قاعدة البيانات المقترحة (ملف <code>pasted_file_mkeLaB_ورقةعملMicrosoftExcelجديد.xlsx</code>).</li>
+            <li>مخطط هيكلية النظام (ملف <code>system_architecture.png</code>).</li>
+            <li>تصور مرئي لمنطق "الدوّارة" (ملف <code>dynamic_ui_logic.png</code>).</li>
+            <li>Django Documentation: <a href="https://docs.djangoproject.com/">https://docs.djangoproject.com/</a></li>
+            <li>PostgreSQL Documentation: <a href="https://www.postgresql.org/docs/">https://www.postgresql.org/docs/</a></li>
+        </ol>
+
+        <hr>
+
+        <!-- Document Footer -->
+        <div class="document-footer">
+            <p>هذه الوثيقة من إعداد <strong>Manus AI</strong> وتمثل المتطلبات الأساسية لمشروع Smart System.</p>
+            <p>آخر تحديث: 8 يوليو 2026 | الإصدار: 1.0</p>
+            <p>© 2026 جميع الحقوق محفوظة</p>
+        </div>
+    </div>
+</body>
+</html>

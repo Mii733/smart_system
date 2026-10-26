@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyApp</title>
+</head>
+<body>
+    <h1>Create New Table:</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.name.label }} {{ form.name }}
+        {{ form.fields.management_form }}
+        {% for field_form in form.fields %}
+            <div>
+                {{ field_form.name.label }} {{ field_form.name }}
+            </div>
+            <div>
+                {{ field_form.field_type.label }} {{ field_form.field_type }}
+            </div>
+            <div>
+                {{ field_form.related_table.label }} {{ field_form.related_table }}
+            </div>
+        {% endfor %}
+        <input type="submit" value="Save">
+    </form>
+</body>
+</html>

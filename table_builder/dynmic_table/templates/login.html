@@ -1,0 +1,69 @@
+
+
+
+{% load static %}
+
+
+
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <title>تسجيل الدخول</title>
+    <style>
+        body {
+            direction: rtl; /* Set text direction to right-to-left */
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">دخول</button>
+        </form>
+        
+        
+        <!-- {% for message in messages %}
+            <div>{{ message }}</div>
+        {% endfor %} -->
+    </div>
+</body>
+</html>
+

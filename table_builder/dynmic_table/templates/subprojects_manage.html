@@ -1,0 +1,361 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load static %}
+{% block page_title %}
+{% endblock page_title %}
+{% block content %}
+<!-- <style>
+    /* تصميم الجسم الرئيسي */
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #3c3c3c;
+    }
+
+    /* تصميم شريط التنقل العلوي */
+    .navbar {
+        background-color: #1e2a3a;
+        /* اللون الأساسي الداكن */
+        overflow: hidden;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .navbar a {
+        float: right;
+        display: block;
+        color: #fff;
+        text-align: center;
+        padding: 16px 24px;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .navbar a:hover {
+        background-color: #3498db;
+        color: white;
+    }
+
+    /* تصميم الحاوية التي تحتوي على الأزرار */
+    .container {
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* تصميم الأعمدة داخل الحاوية */
+    .col {
+        margin: 15px;
+        text-align: center;
+    }
+
+    /* تصميم البطاقات */
+    .card {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        padding: 20px;
+        width: 230px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 500;
+        text-decoration: none;
+        color: #1e2a3a;
+        /* اللون الأساسي الداكن */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        background-color: #34495e;
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* تصميم زر العودة */
+    .back-button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 30px;
+        transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+    }
+
+    .back-button:active {
+        background-color: #1c5981;
+        transform: translateY(2px);
+    }
+
+    /* تصميم الحاوية التي تحتوي على النموذج */
+    .container1 {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* تصميم الحقول في النموذج */
+    .form-group1 {
+        margin-bottom: 20px;
+    }
+
+    #modelname,
+    select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+        transition: border 0.3s ease;
+    }
+
+    #modelname:focus,
+    select:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+        outline: none;
+    }
+
+    #custmlabel {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .button-container1 {
+        text-align: center;
+    }
+
+    .button1 {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 24px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .button1:hover {
+        background-color: #0056b3;
+    }
+
+    /* تحسين التصميم للأجهزة الصغيرة */
+    @media (max-width: 768px) {
+        .container1 {
+            padding: 15px;
+        }
+
+        #modelname,
+        select {
+            padding: 10px;
+        }
+
+        .button1 {
+            padding: 10px 20px;
+        }
+    }
+</style> -->
+
+<!-- 
+<div class="container">
+    <div class="row">
+        {% for system in systems %}
+        <div class="col">
+            <a href="{% url 'subproject_detail' sys_name_id=system.id %}" class="card">
+                {{ system.name }}
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+ -->
+
+
+<!-- Main content -->
+<!-- <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-lg">
+                    <div class="card-header">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <div class="float-right">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fa fa-plus-circle"></i> نظام جديد
+                                </a>
+                            </div>
+                            <a class="btn btn-outline-primary btn-sm float-left" id="btnbtn"
+                                title="الرجوع إلى الصفحة السابقة" href="{% url 'system_manage' %}">
+                                رجوع
+                                <i class='fas fa-sign-out-alt'></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="scrollable-table">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>{% trans "#" %}</th>
+                                        <th>الاسم</th>
+                                        <th>{% trans "العمليات" %}</th>
+                                    </tr>
+                                </thead>
+
+                                {% for system in systems %}
+
+                                <tbody>
+                                    <tr>
+
+                                        <td>{{ system.id }}</td>
+                                        <td>{{ system.name }}</td>
+                                        <td class="mailbox-date pull-right no-print">
+
+                                            <a href="{% url 'subprojects_edit' sys_name_id=system.id %}"
+                                                class="btn btn-outline-secondary btn-xs" data-toggle="tooltip"
+                                                title="{% trans 'تعديل اسم النظام' %}">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'subproject_detail' sys_name_id=system.id %}"
+                                                class="btn btn-outline-secondary btn-xs" data-toggle="tooltip"
+                                                title="{% trans 'عرض النظام' %}">
+                                                <i class="fa fa-cogs"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-outline-danger btn-xs" data-toggle="tooltip"
+                                                onclick="confirmDelete({{ system.id }})"
+                                                title="{% trans 'حذف النظام' %}">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+
+{% if messages %}
+<div class="alert-container">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-lg">
+                    <div class="card-header">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <div class="float-right">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fa fa-plus-circle"></i> نظام جديد
+                                </a>
+                            </div>
+                            <a class="btn btn-outline-primary btn-sm float-left" id="btnbtn"
+                                title="الرجوع إلى الصفحة السابقة" href="{% url 'system_manage' %}">
+                                رجوع
+                                <i class='fas fa-sign-out-alt'></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="scrollable-table">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>{% trans "#" %}</th>
+                                        <th>الاسم</th>
+                                        <th>{% trans "العمليات" %}</th>
+                                    </tr>
+                                </thead>
+
+                                {% for system in systems %}
+                                <tbody>
+                                    <tr>
+                                        <td>{{ system.id }}</td>
+                                        <td>{{ system.name }}</td>
+                                        <td class="mailbox-date pull-right no-print">
+                                            <a href="{% url 'subprojects_edit' sys_name_id=system.id %}"
+                                                class="btn btn-outline-secondary btn-xs" data-toggle="tooltip"
+                                                title="{% trans 'تعديل اسم النظام' %}">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'subproject_detail' sys_name_id=system.id %}"
+                                                class="btn btn-outline-secondary btn-xs" data-toggle="tooltip"
+                                                title="{% trans 'عرض النظام' %}">
+                                                <i class="fa fa-cogs"></i>
+                                            </a>
+                                            <a href="{% url 'subprojects_delete' sys_name_id=system.id %}" class="btn btn-outline-danger btn-xs" data-toggle="tooltip"
+                                                onclick="return confirm('هل تريد الحف')"
+                                                title="{% trans 'حذف النظام' %}">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

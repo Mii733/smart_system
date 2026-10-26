@@ -1,0 +1,321 @@
+{%  extends "base.html" %}
+
+{% load static %} 
+
+
+{% block content %}
+<style>
+    #sidebar{
+        display: inline;
+    } 
+
+
+    .container{
+        display: flex;
+        height: 500px;
+        width: 800px;
+        border: 1px solid black;
+     
+      
+    }
+    .container{
+        display: flex;
+     flex-direction: column;
+    
+      
+    }
+    .side{
+        display: flex;
+    }
+    .side img{
+        width: 450px;
+        height: 450px;
+    }
+
+</style>
+
+    <div class="form-content my-3 p-3">
+        <div class="container">
+            <div class="row justify-content-center">
+              
+                <div class="col-lg-5">
+                    <div class="login-logo">
+                        <a>نظام <b>التوثيق الذكي</b></a>
+                      </div>
+
+                    <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
+                        <div class="card-header justify-content-center">
+                          <h3 class="font-weight-light my-1 text-center">تسجيل الدخول</h3>
+                        </div>
+                        {% if form.errors %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <div id="form_errors">
+                                    {% for key, value in form.errors.items %}
+                                        <strong>{{ value }}</strong>
+                                    {% endfor %}
+                                </div>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %}
+                       
+                        <div class="card-body">
+                            <form method="POST" class="form">
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group">
+                                            <label class="small mb-1">اسم المستخدم</label>
+                                            {{ form.username }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group">
+                                          <label class="small mb-1">كلمة المرور</label>
+                                          {{ form.password }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group">
+                                            
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group mt-0 mb-1">
+                                          <button name="login" class="btn btn-block bg-gradient-primary btn-lg" id="login">دخول</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        
+                            <div class="side">
+                                <img src="smartDoucment.png" alt="">
+                            </div>
+                        </div>
+                       
+                        <div class="card-footer text-center">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+     </div>
+           
+{% endblock content %}
+
+
+
+
+{% load static %} 
+
+
+{% block content %}
+
+<style>
+    #sidebar{
+        display: inline;
+    } 
+*{
+    margin: 0;
+    padding: 0;
+}
+
+    .container{
+        display: flex;
+        height: 340px;
+        width: 680px;
+        /* border: 1px solid black; */
+        margin: auto;
+        /* margin-top: 50px; */
+     
+      
+    }
+    .form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    /* align-items: center; */
+    /* background-color: rgb(245, 245, 245); */
+    /* background-color:   darkcyan; */
+    background-color:   teal;
+      
+    }
+    .form h3{
+        font-size: 2rem;
+        margin: 30px;
+        margin-right: 60px;
+        color: white;
+        
+      
+    }
+    .system-title{
+      align-items: center;
+      width: 655px;
+      margin: auto;
+      background-color:cadetblue;
+      color: white;
+    }
+
+
+ #login_btn{
+     /* padding: 12px 30px; */
+     /* margin-top: 40px; */
+     font-weight: bold;
+     /* width: 70%; */
+   
+     border-radius: 20px;
+ }
+ #login_btn:hover{
+     cursor: pointer;
+     background-color:tomato;
+ }
+
+    .side{
+
+        /* background-image:url('{% static "img/archive.png" %}'); */
+        background-repeat: no-repeat;
+        background-size: cover;
+        /* display: flex; */
+        justify-content: center;
+        /* align-items: center; */
+        width: 50%;
+background-color: cadetblue;
+
+        /* height: 7em;
+        width: 7em;
+        object-fit: cover;
+        object-position: center center; */
+    }
+ .side img {
+     width: 345px;
+     height: 335px;
+ }
+
+</style>
+
+<div class="card system-title">
+    <h3>نظام التوثيق الذكي</h3>
+</div>
+   <div class="row">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6">
+   {% if form.errors %}
+
+   <div class="alert alert-danger alert-dismissible" role="alert">
+
+       <div id="form_errors">
+           {% for key, value in form.errors.items %}
+               <strong>{{ value }}</strong>
+           {% endfor %}
+       
+       </div>
+       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+       </button>
+   </div>
+
+{% endif %}
+</div>
+</div>
+        <div class="container">
+        
+              
+               
+                    <!-- <div class="login-logo">
+                        <a>نظام <b>التوثيق الذكي</b></a>
+                      </div> -->
+                      {% for message in messages %}
+                      <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                          {{ message }}
+                      </div>
+                  {% endfor %}
+                      
+                        <!-- {% if form.errors %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <div id="form_errors">
+                                    {% for key, value in form.errors.items %}
+                                        <strong>{{ value }}</strong>
+                                    {% endfor %}
+                                </div>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %} -->
+      
+                      
+                            <form method="POST" class="form">
+                                <h3>تسجيل الدخول</h3>
+                                <!-- <div class="card-header justify-content-center">
+                                    <h3 class="font-weight-light my-1 text-center">تسجيل الدخول</h3>
+                                  </div> -->
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group">
+                                            <label class="small mb-1">اسم المستخدم</label>
+                                            {{ form.username }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group">
+                                          <label class="small mb-1">كلمة المرور</label>
+                                          {{ form.password }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group">
+                                            
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group mt-0 mb-1">
+                                          <button name="login" class="btn btn-block bg-gradient-primary btn-lg" id="login_btn">دخول</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                     
+                            <div class="side">
+                               
+                                <img src="{% static 'img/loginarichv.png' %}">
+                                <!-- <img src="{% static 'img/archive.png' %}"> -->
+                                <!-- <img src='archive.png' alt="" 
+                              > -->
+                                
+                               
+                            </div>
+                      
+                       
+                      
+                 
+               
+          
+          
+        </div>
+    
+           
+{% endblock content %}
+
+
+
+
+{% load static %}

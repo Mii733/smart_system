@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}
+{% endblock page_title %}
+{% block content %}
+
+<h2>إضافة شرط جديد على {{ model_name }}</h2>
+
+<div id="form-container">
+    <form method="POST" action="" class="container" enctype="multipart/form-data">
+        <div id="close" class="text-left">
+            <a href="{% url 'condition_list' model_name sys_name_id %}">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </a>
+        </div>
+
+        <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-primary btn-sm">حفظ</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
+{% block scripts %}
+
+<script>
+    $(document).on('change', '#id_dependent_field', function () {
+    var selected_field = $(this).val();
+    var model_name = "{{ model_name }}";
+    var url = "{% url 'get_selected_field' %}";
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            'selected_field': selected_field,
+            'model_name': model_name,
+            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        success: function (response) {
+            if (response.status === 1) {
+                console.log("✅ القيم المحددة تم تحديثها!");
+                $('#id_restricted_values').parent().html(response.restricted_values_html);
+            } else {
+                console.log("❌ خطأ: ", response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log("❌ خطأ في AJAX:", error);
+        }
+    });
+});
+
+    $(document).on('submit', '#form-container form', function (e) {
+        e.preventDefault();  // منع التحديث التلقائي للصفحة
+
+        var form = $(this);
+        var url = form.attr('action');
+
+        $.ajax({
+            method: "POST",
+            url: url,
+            data: form.serialize(),  // إرسال كل بيانات الفورم
+            success: function (data) {
+                if (data.status === 1) {
+                    alert("✅ تم الحفظ بنجاح!");
+                    location.reload();  // تحديث الصفحة بعد الحفظ
+                } else {
+                    console.log("❌ أخطاء في الفورم:", data.errors);
+                    $("#form-container").html(data.form_html);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("❌ خطأ في الطلب AJAX:", error);
+            }
+        });
+    });
+
+
+</script>
+
+{% endblock scripts %}

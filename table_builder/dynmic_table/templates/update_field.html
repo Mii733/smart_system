@@ -1,0 +1,366 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    /* max-width: 600px; */
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    direction: rtl;
+    /* توجيه العناصر إلى اليمين */
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .button-container {
+    text-align: center;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 10px;
+      border-radius: 0;
+    }
+
+    input,
+    select {
+      padding: 8px;
+    }
+
+    .button {
+      padding: 8px 16px;
+    }
+  }
+
+  #close {
+    direction: ltr;
+    /* توجيه العناصر إلى اليمين */
+    margin: 5px;
+
+  }
+</style>
+
+
+{% if fieldcreated %}
+<div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+  <strong>Hurray!</strong> New model {{ field }} created successfully.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% elif fieldExists %}
+<div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+  <strong>عذرا!</strong> {{ field }} 'الحقل موجود فعلا''..
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+{% if messages %}
+<div class="alert-container">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<form action="" method="post" class="container" id="form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div id="close">
+    <a href="{% url 'manage_models' model_name=model_name sys_name_id=sys_name_id %}" class="close" data-dismiss="modal"
+      aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </a>
+  </div>
+  <h2 class='text-center h2text' id="field"> هيكل الحقل </h2>
+  <div class="form-group">
+    <input type="text" required="required" name="field" id="id_field" value="{{ field.kwargs.verbose_name|slice:":63" }}" placeholder="ادخل اسم الحقل" />
+    <!-- <input type="text" required="required" name="field" id="id_field" value="{{ field.name|slice:":63" }}" placeholder="ادخل اسم الحقل" /> -->
+    <i class="bar"></i>
+  </div>
+  <div class="form-group" hidden >
+    <label class="control-label" for="select">إختار نوع الحقل</label><i class="bar"></i>
+    <select name="datatype" id="datatype" required="required" >
+      <option value="django.db.models.CharField" {% if field.class_name == 'django.db.models.CharField' %}selected{% endif %}>نص</option>
+      <option value="django.db.models.TextField" {% if field.class_name == 'django.db.models.TextField' %}selected{% endif %}>نص طويل</option>
+      <option value="django.db.models.IntegerField" {% if field.class_name == 'django.db.models.IntegerField' %}selected{% endif %}>عدد حقيقي</option>
+      <option value="django.db.models.FloatField" {% if field.class_name == 'django.db.models.FloatField' %}selected{% endif %}>عدد عشري</option>
+      <option value="django.db.models.BooleanField" {% if field.class_name == 'django.db.models.BooleanField' %}selected{% endif %}>منطقي</option>
+      <option value="django.db.models.DateTimeField" {% if field.class_name == 'django.db.models.DateTimeField' %}selected{% endif %}>تاريخ/ وقت</option>
+      <option value="django.db.models.ForeignKey" {% if field.class_name == 'django.db.models.ForeignKey' %}selected{% endif %}>علاقة/ربط</option>
+      <option value="django.db.models.FileField" {% if field.class_name == 'django.db.models.FileField' %}selected{% endif %}>ملف</option>
+      <option value="django.db.models.ImageField" {% if field.class_name == 'django.db.models.ImageField' %}selected{% endif %}>صورة</option>
+
+    </select>
+    
+  </div>
+  <div class="form-group" id="relatedModel" style="display: none;">
+    <div class="row">
+      <div class="col-2 dropdown">
+        <select name="to" id="to" required="required" aria-label="Default select example">
+          <option selected>اختار الجدول ؟</option>
+          {% for model in modelName %}
+          <div style="background-color: green;">
+            <option value="{{model.modelnameAr}}">{{ model.modelnameAr }}</option>
+          </div>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-2 dropdown">
+        <select name="relatedField" id="relatedField" required="required" aria-label="Default select example">
+          <option selected>اختار الحقل ؟</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="form-group" id="maxlen_field">
+    <label class="control-label" for="input"> طول الحقل</label>
+    <input type="number" min="0" max="99" name="maxlen" value="{{ field.kwargs.max_length }}" placeholder="إدخل طول الحقل" id="maxlen" oninput="validateLength(this)" />
+
+    <i class="bar"></i>
+    <i class="input-error">العدد المسموح بة (0 - 99)</i>
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="select">فارغ او لا ?</label><i class="bar"></i>
+
+
+    <select name="null" required="required">
+      <option value="False" {% if field.kwargs.null %}selected{% endif %}>لا</option>
+      <option value="True" {% if field.kwargs.null %}selected{% endif %}>نعم</option>
+
+    </select>
+    
+  </div>
+  
+  <div class="form-group">
+    <label class="control-label" for="select">يمكن التكرار ?</label>
+    <select name="unique" required="required">
+      <option value="True" {% if field.kwargs.unique %}selected{% endif %}>نعم</option>
+      <option value="False" {% if field.kwargs.unique %}selected{% endif %}>لا</option>
+    </select>
+    <i class="bar"></i>
+  </div>
+  <div class="row" id="buttonArea">
+  </div>
+  <div class="modal-footer">
+    
+    <button type="submit" class="btn btn-outline-primary btn-sm">حفظ</button>
+</div>
+
+
+  <script>
+    function validateLength(input) {
+      // التأكد من أن الرقم المدخل لا يزيد عن رقمين
+      if (input.value > 99) {
+        input.value = 99;  // تعيين الرقم إلى الحد الأقصى (99)
+      }
+    }
+  </script>
+  <script>
+  
+
+    document.getElementById('to').addEventListener('change', function () {
+      var selectedTable = this.value;
+
+      // استدعاء صفحة PHP لاسترداد البيانات
+      fetch('/get_fields/?table=' + selectedTable)
+        .then(response => response.json())
+        .then(data => {
+          var relatedFieldSelect = document.getElementById('relatedField');
+          relatedFieldSelect.innerHTML = ''; // لحذف الخيارات القديمة
+
+          data.forEach(function (item) {
+            var option = document.createElement('option');
+            option.value = item.name;
+            // alert(item.name)
+            option.textContent = item.name;
+            relatedFieldSelect.appendChild(option);
+          });
+        })
+        .catch(error => console.error('حدث خطأ: ', error));
+    });
+  </script>
+</form>
+
+
+    <!-- <input type="checkbox" name="unique" {% if field.kwargs.unique %}checked{% endif %}> -->
+
+  <!-- <input type="checkbox" name="null" value="on" {% if field.kwargs.null %}checked{% endif %}> -->
+
+<!-- 
+<h2>Update Field</h2>
+<form method="POST">
+    {% csrf_token %}
+    
+    <div>
+        <label for="id_field">Field Name (Verbose Name)</label>
+        <input type="text" name="field" id="id_field" value="{{ field.name|slice:":63" }}">
+    </div>
+
+    <div>
+        <label for="id_model_name">Model Schema</label>
+        <select name="model_name" id="id_model_name">
+            {% for model in models %}
+                <option value="{{ model.name }}" {% if model.name == model_name %}selected{% endif %}>{{ model.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label for="id_class_name">Field Type</label>
+        <select name="datatype" id="id_class_name">
+            <option value="CharField" {% if field.class_name == 'CharField' %}selected{% endif %}>نص</option>
+            <option value="IntegerField" {% if field.class_name == 'IntegerField' %}selected{% endif %}>عدد حقيقي</option>
+            <option value="DateField" {% if field.class_name == 'DateField' %}selected{% endif %}>تاريخ</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="id_null">Allow Null</label>
+        <input type="checkbox" name="null" {% if field.kwargs.null %}checked{% endif %}>
+    </div>
+
+    <div>
+        <label for="id_unique">Unique</label>
+        <input type="checkbox" name="unique" {% if field.kwargs.unique %}checked{% endif %}>
+    </div>
+
+    <div>
+        <label for="id_maxlen">Max Length</label>
+        <input type="text" name="maxlen" value="{{ field.kwargs.max_length }}" id="id_maxlen">
+    </div>
+
+    <button type="submit">Save Changes</button>
+</form> -->
+
+
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    // استدعاء دالة handleDataTypeChange عند تحميل الصفحة
+    // handleDataTypeChange();
+    const fieldSelect = document.getElementById('datatype');
+    const maxlenField = document.getElementById('maxlen_field');
+
+    if (fieldSelect.value === 'django.db.models.FileField' || fieldSelect.value === 'django.db.models.ImageField' || fieldSelect.value === 'django.db.models.FloatField' || fieldSelect.value === 'django.db.models.IntegerField'|| fieldSelect.value === 'django.db.models.DateTimeField' || fieldSelect.value === 'django.db.models.BooleanField' || fieldSelect.value === 'django.db.models.ForeignKey') {
+
+    maxlenField.style.display = 'none';
+
+    } else {
+    maxlenField.style.display = 'block';
+    maxlenField.required = required
+
+    }
+  });
+
+  function handleDataTypeChange() {
+    // المنطق الخاص بك هنا
+    const datatypeSelect = document.getElementById('datatype');
+    const selectedValue = datatypeSelect.value;
+
+    // تنفيذ الإجراءات بناءً على القيمة المختارة
+    console.log("القيمة المختارة هي: " + selectedValue);
+
+    // أضف منطقك هنا مثل تغيير ظهور الحقول بناءً على نوع الحقل
+    if (selectedValue === 'django.db.models.ForeignKey') {
+      document.getElementById('relatedModel').style.display = 'block';
+    } else {
+      document.getElementById('relatedModel').style.display = 'none';
+    }
+  }
+</script>
+
+
+<script>
+  function handleDataTypeChange() {
+    var datatypeSelect = document.getElementById("datatype");
+    var selectedValue = datatypeSelect.options[datatypeSelect.selectedIndex].value;
+
+    var relatedModel = document.getElementById("relatedModel");
+    var relatedField = document.getElementById("relatedModelField");
+    if (selectedValue === "django.db.models.ForeignKey") {
+      relatedModel.style.display = "block";
+      relatedField.style.display = "block";
+      // يمكنك هنا تنفيذ الإجراءات اللازمة عندما يتم اختيار "مفتاح ثانوي"
+      // ForeignKey(الجدول الذي تم اختيارة, on_delete=models.CASCADE, related_name='related_table', blank=True, null=True),
+
+    } else {
+      relatedModel.style.display = "none";
+      relatedField.style.display = "none";
+    }
+  }
+</script>
+
+<!-- خاص با اخفاء حقل طول الحقل -->
+<script>
+  const fieldSelect = document.getElementById('datatype');
+  const maxlenField = document.getElementById('maxlen_field');
+
+  fieldSelect.addEventListener('DOMContentLoaded', function () {
+    if (fieldSelect.value === 'django.db.models.FileField' || fieldSelect.value === 'django.db.models.ImageField' || fieldSelect.value === 'django.db.models.FloatField' || fieldSelect.value === 'django.db.models.IntegerField'|| fieldSelect.value === 'django.db.models.DateTimeField' || fieldSelect.value === 'django.db.models.BooleanField' || fieldSelect.value === 'django.db.models.ForeignKey') {
+
+      maxlenField.style.display = 'none';
+
+    } else {
+      maxlenField.style.display = 'block';
+      maxlenField.required = required
+
+    }
+  });
+</script>
+
+<script>
+  $(function () {
+    $('#id_department').select2({
+      placeholder: 'من فضلك اختار جهة',
+      width: "100%"
+    })
+  });
+</script>
+
+{% endblock %}

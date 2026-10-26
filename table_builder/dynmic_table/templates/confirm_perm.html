@@ -1,0 +1,84 @@
+
+
+
+
+
+{%  extends "base.html" %}
+
+{% load static %} 
+{% load crispy_forms_tags %} 
+{% block title %}
+
+{% endblock title %}
+
+
+{% block content %}
+
+
+    <div class="col-md-12 col-sm-12 col-xs-10">
+      <div class="card-header" >
+        <div class="d-flex w-100 align-items-center justify-content-between">
+            <h2 class="card-title fw-bold"></h2>
+            <div class="tools">
+              <a class="btn btn-outline-primary btn-sm"  id="btnbtn" title="الرجوع إلى الصفحة الرئيسية"  href="{% url 'index' %}"> الرجوع إلى الصفحة الرئيسية
+                <i class='fas fa-sign-out-alt'></i></a>
+              <!-- <button type="button" class="btn btn-primary rounded-0 bg-gradient btn-sm"  data-toggle="modal" data-target="#BoxModal" ><i class="fa fa-plus"></i>  جديد  </button> -->
+            </div>
+        </div>
+      </div>
+            <!-- Breadcrumbs-->
+          
+           
+
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+           
+
+              
+         
+   
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal-->
+
+
+
+	
+
+
+
+        </div>
+    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+    {% endblock content %} 
+    {% block scripts %}
+    <script>
+      $(function() {
+      
+        $('#inputMessage11').hide()
+      });
+    </script>
+    {% endblock scripts %}
+
+
+
+
+
+
+
+
+
+
+
+
+

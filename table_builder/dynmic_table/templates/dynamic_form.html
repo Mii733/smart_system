@@ -1,0 +1,235 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table Interface</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="dynamic_form"></div>
+
+    <script>
+        $(document).ready(function() {
+            createTableInterface();
+        });
+
+        function createTableInterface() {
+            var tableName = 'dynamic_models_table8';
+
+            $.ajax({
+                url: '/get_table_fields/',  // تعديل المسار بناءً على مسار الخادم الخاص بك
+                type: 'GET',
+                data: { table_name: tableName },
+                success: function(response) {
+                    var fields = response.fields;
+
+                    var interfaceHTML = '<form>';
+                    for (var i = 0; i < fields.length; i++) {
+                        var fieldName = fields[i];
+                        interfaceHTML += '<label for="' + fieldName + '">' + fieldName + '</label>';
+                        interfaceHTML += '<input type="text" id="' + fieldName + '" name="' + fieldName + '">';
+                    }
+                    interfaceHTML += '<button type="submit">Submit</button>';
+                    interfaceHTML += '</form>';
+
+                    $('#dynamic_form').html(interfaceHTML);
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+<br>
+  <h1>welcom</h1>
+  <div>
+    <a href="{% url 'my_view' %}">   dynamic form  </a>
+</br>
+
+<form action="{% url 'my_view1' %}" method="get" >
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-sm-9 mt-4">
+      <div class="form-group">
+        <select id="model_select" name="model">
+          {% for model_name, model_class in all_models.items %}
+            <option value="{{ model_name }}">{{ model_name }}</option>
+          {% endfor %}
+        </select>
+        <label class="control-label" for="select">Select model</label><i class="bar"></i>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="button-container">
+        <button class="button" type="submit" style="border-radius:10px;font-size:1rem;"><span><strong>SUBMIT</strong></span></button>
+      </div>
+    </div>
+  </div>
+</form>
+<br>
+<form action="{% url 'my_view1' %}" method="get" >
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-sm-9 mt-4">
+      <div class="form-group">
+        <select id="model_select" name="model">
+          {% for model_name in all_models2 %}
+            <option value="{{ model_name }}">{{ model_name }}</option>
+          {% endfor %}
+        </select>
+        <label class="control-label" for="select">Select model</label><i class="bar"></i>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="button-container">
+        <button class="button" type="submit" style="border-radius:10px;font-size:1rem;"><span><strong>SUBMIT</strong></span></button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<br>
+<a href="{% url 'dynamic_form' %}">   dynamic form2  </a>
+
+<br>
+
+<form method="POST" action="">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Submit">
+</form>
+
+<!-- <script>
+    $(document).ready(function() {
+  var tableName = 'dynamic_models_table6'; // قم بتعديل اسم الجدول هنا
+  
+  // استعلام قاعدة البيانات لاسترداد حقول الجدول
+  $.ajax({
+    url: '/dynmic_table/get_table_fields/', // قم بتعديل المسار وفقًا للعرض الذي يسترد حقول الجدول
+    type: 'GET',
+    data: { table_name: tableName },
+    success: function(response) {
+      // استجابة ناجحة
+      var fields = response.fields;
+      
+      // إنشاء واجهة المستخدم
+      var formHTML = '<form>';
+      for (var i = 0; i < fields.length; i++) {
+        var fieldName = fields[i];
+        formHTML += '<label for="' + fieldName + '">' + fieldName + '</label>';
+        formHTML += '<input type="text" id="' + fieldName + '" name="' + fieldName + '">';
+      }
+      formHTML += '<button type="submit">إرسال</button>';
+      formHTML += '</form>';
+      
+      // أضف واجهة المستخدم إلى عنصر الصفحة المناسب
+      $('#form-container').html(formHTML);
+    },
+    error: function(xhr, status, error) {
+      // خطأ في الاستعلام عن الحقول
+      console.error(error);
+    }
+  });
+});
+
+
+</script> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Form Example</title>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <style>
+        .dynamic-field {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dynamic Form Example</h1>
+    <form id="dynamic-form">
+        <div class="dynamic-field">
+            <label for="text-field">Text Field:</label>
+            <input type="text" id="text-field" name="text-field">
+        </div>
+        <div class="dynamic-field">
+            <label for="number-field">Number Field:</label>
+            <input type="number" id="number-field" name="number-field">
+        </div>
+        <div class="dynamic-field">
+            <label for="boolean-field-1">Boolean Field 1:</label>
+            <input type="checkbox" id="boolean-field-1" name="boolean-field-1">
+        </div>
+        <div class="dynamic-field">
+            <label for="boolean-field-2">Boolean Field 2:</label>
+            <input type="checkbox" id="boolean-field-2" name="boolean-field-2">
+        </div>
+        <div class="dynamic-field">
+            <label for="dropdown-field">Dropdown Field:</label>
+            <select id="dropdown-field" name="dropdown-field">
+                <option value="">Select an option</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+        <div class="dynamic-field">
+            <label for="dependent-dropdown-1">Dependent Dropdown 1:</label>
+            <select id="dependent-dropdown-1" name="dependent-dropdown-1">
+                <option value="">Select an option</option>
+            </select>
+        </div>
+        <div class="dynamic-field">
+            <label for="dependent-dropdown-2">Dependent Dropdown 2:</label>
+            <select id="dependent-dropdown-2" name="dependent-dropdown-2">
+                <option value="">Select an option</option>
+            </select>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            // Populate dependent dropdowns based on selection in main dropdown
+            $('#dropdown-field').change(function() {
+                var selectedOption = $(this).val();
+                populateDependentDropdowns(selectedOption);
+            });
+
+            function populateDependentDropdowns(selectedOption) {
+                // Here, you would make an AJAX request to your Django backend to retrieve
+                // the options for the dependent dropdowns based on the selected option
+                // in the main dropdown. For the sake of this example, we'll just
+                // hardcode some options.
+                var options = [];
+                if (selectedOption === 'option1') {
+                    options = ['option1_1', 'option1_2', 'option1_3'];
+                } else if (selectedOption === 'option2') {
+                    options = ['option2_1', 'option2_2', 'option2_3'];
+                } else if (selectedOption === 'option3') {
+                    options = ['option3_1', 'option3_2', 'option3_3'];
+                }
+
+                $('#dependent-dropdown-1').empty();
+                $('#dependent-dropdown-2').empty();
+
+                $.each(options, function(index, option) {
+                    $('#dependent-dropdown-1').append('<option value="' + option + '">' + option + '</option>');
+                    $('#dependent-dropdown-2').append('<option value="' + option + '">' + option + '</option>');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+

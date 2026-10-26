@@ -1,0 +1,267 @@
+
+
+
+
+
+
+
+{% extends 'index.html'%} 
+
+
+{% block content %}
+
+<style>
+  body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+  }
+
+  .container1 {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      direction: rtl; /* توجيه العناصر إلى اليمين */
+  }
+
+  .form-group1 {
+      margin-bottom: 20px;
+  }
+
+  #modelname, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+  }
+
+  #custmlabel {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+  }
+
+  .button-container1 {
+      text-align: center;
+  }
+
+  .button1 {
+      /* padding: 10px 20px; */
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      direction: rtl; /* توجيه العناصر إلى اليمين */
+
+  }
+
+  .button:hover {
+      background-color: #0056b3;
+  }
+
+  .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  @media (max-width: 768px) {
+      .container1 {
+          padding: 10px;
+          border-radius: 0;
+      }
+
+      #modelname, select {
+          padding: 8px;
+      }
+
+      .button1 {
+          padding: 8px 8px;
+      }
+  }
+
+  #btn{
+    margin-left: 10px;
+  }
+</style>
+
+
+{% if modelCreated %}
+<script>
+  alert("تم انشاء الجدول بنجاح")
+</script>
+  
+{% elif modelExists %}
+<script>
+  alert("هذا الجدول موجود مسبقا")
+</script>
+  
+{% endif %}
+<!-- <div class="text-center">
+  <h1 class="animate__animated animate__wobble mt-2">  إنشا جدول تلقائي</h1>
+</div> -->
+
+<form action="{% url 'create_models' sys_name_id=sys_name_id %}" method="post" class="container1" id="form" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <a href="{% url 'subproject_detail' sys_name_id=sys_name_id %}" >
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </a>
+  
+    <h2 class='text-center h2text'> هيكل الجدول</h2>
+    
+    <div class="form-group1">
+      <!-- <input type="text" pattern="^[A-Z][a-z]+" required="required" name="modelname" placeholder="Enter modelname"/> -->
+      <label id="custmlabel" class="control-label1" for="input">اسم الجدول</label>
+      <input type="text" id="modelname"  required="required" name="modelname" value="{{ modelName.modelnameAr|slice:":63" }}" placeholder="ادخل اسم الجدول "/>
+			<i class="bar"></i>
+			<!-- <i class="input-error">   ادخل اسم الجدول</i> -->
+    </div>
+    <div class="form-group1">
+      <label id="custmlabel" class="control-label1" for="select">إختار نوع الجدول</label><i class="bar"></i>
+      <select name="model_type" required="required">
+        <option value="تهية">تهية</option>
+        <option value="عمليات">عمليات</option>
+      </select>
+    </div>
+  
+    <div class="row" id="buttonArea">
+      <div class="col-sm-4">
+        <div id="btn">
+          <button class="btn btn-block btn-outline-primary btn-sm" id="btn" type="submit" style="border-radius:10px;font-size:1rem;"><span>حفظ</span></button>
+        </div>
+      </div>
+    </div>
+</form>
+<script>
+  function handleDataTypeChange() {
+    var datatypeSelect = document.getElementById("datatype1");
+    var selectedValue = datatypeSelect.options[datatypeSelect.selectedIndex].value;
+  
+    var relatedModelField = document.getElementById("relatedModel");
+    if (selectedValue === "django.db.models.ForeignKey") {
+      relatedModelField.style.display = "block";
+      // يمكنك هنا تنفيذ الإجراءات اللازمة عندما يتم اختيار "مفتاح ثانوي"
+        // ForeignKey(الجدول الذي تم اختيارة, on_delete=models.CASCADE, related_name='related_table', blank=True, null=True),
+      
+    } else {
+      relatedModelField.style.display = "none";
+    }
+  }
+  </script>
+  
+  
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --> -->
+
+{% endblock %}
+
+<!-- <script>
+function handleDataTypeChange() {
+  var datatypeSelect = document.getElementById("datatype1");
+  var selectedValue = datatypeSelect.options[datatypeSelect.selectedIndex].value;
+
+  var relatedModelField = document.getElementById("relatedModelField");
+  if (selectedValue === "django.db.models.ForeignKey") {
+    relatedModelField.style.display = "block";
+
+    // استدعاء AJAX لجلب الجداول المتاحة
+    $.ajax({
+      url: '/get_tables/', // تعديل الرابط الخاص بجلب الجداول
+      method: 'GET',
+      success: function(response) {
+        // عرض القائمة المنسدلة للاختيار من الجداول المتاحة
+        var tableSelect = document.createElement("select");
+        tableSelect.name = "related_table";
+        response.tables.forEach(function(table) {
+          var option = document.createElement("option");
+          option.value = table;
+          option.text = table;
+          tableSelect.appendChild(option);
+        });
+        tableSelect.onchange = function() {
+          var selectedTable = this.value;
+
+          // تحديث القيمة المحددة في حقل ForeignKey
+          var foreignKeyInput = document.getElementById("id_foreign_key_field"); // استبدل "id_foreign_key_field" بالمعرف الصحيح لحقل ForeignKey
+          foreignKeyInput.value = selectedTable;
+        };
+        relatedModelField.appendChild(tableSelect);
+      }
+    });
+
+  } else {
+    relatedModelField.style.display = "none";
+    relatedModelField.innerHTML = ""; // إزالة أي عناصر سابقة في حقل الاختيار
+  }
+}
+</script> -->
+
+
+
+<!-- 
+<form method="post">
+  {% csrf_token %}
+ 
+
+{% for field_form in field_forms %}
+  <div class="field-form">
+    {{ field_form.as_table }}
+    <label for="id_field_{{ field_form.prefix }}-related_table">جدول مرتبط:</label>
+    <select name="field_{{ field_form.prefix }}-related_table" id="id_field_{{ field_form.prefix }}-related_table">
+      <option value="">لاشيء</option>
+      {% for table in tables %}
+        <option value="{{ table.id }}">{{ table.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+{% endfor %}
+  <input type="submit" value="Save">
+</form> -->
+
+
+<!-- في ملف create_table.html -->
+
+<!-- <form method="post">
+  {% csrf_token %}
+  {{ table_form.as_p }}
+  <hr>
+  {{ field_form.as_p }}
+  <input type="text" name="table_name" >
+  <input type="text" name="field_names" >
+  <input type="text" name="field_types">
+  <button type="submit">إنشاء الجدول</button>
+</form> -->
+
+<!-- <form method="post">
+    {% csrf_token %}
+  <table class="table table-bordered table-hover dataTable" id="plist">
+    <thead>
+      <tr>
+        <th>{{ table_form.as_p }}</th>
+        <th><input type="number" name="fields_count"></th>
+        <th>عدد الحقول</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+          {% for field_form in field_forms %}
+        <tr>
+          <td>{{ field_form.as_p }}</td>
+        </tr>
+        {% endfor %}
+      </tr>
+      
+    </tbody>
+      
+  </table>
+    <input type="submit" value="Save">
+  </form> -->

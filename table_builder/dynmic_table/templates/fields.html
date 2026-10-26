@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Fields to Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Select Fields to Display:</h3>
+        {% for field in fields %}
+        <input type="checkbox" name="selected_fields" value="{{ field.field_name }}">
+        <label>{{ field.field_name }}</label><br>
+        {% endfor %}
+        <button type="submit">حفظ </button>
+    </form>
+
+    {% if selected_fields %}
+    <form method="post">
+        {% csrf_token %}
+        <h3>Search Form:</h3>
+        {% for field in selected_fields %}
+        <label>{{ field }}:</label>
+        <input type="text" name="{{ field }}"><br>
+        {% endfor %}
+        <button type="submit">بحث</button>
+    </form>
+    {% else %}
+    <p>No fields selected.</p>
+    
+
+    {% if results %}
+    <h3>Search Results:</h3>
+    <table>
+        <thead>
+            <tr>
+                {% for field in selected_fields %}
+                <th>{{ field }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in results %}
+            <tr>
+                {% for field in selected_fields %}
+                <td>{{ item }}</td>
+                <td>{{ item.field_name }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    {% endif %}
+</body>
+</html>

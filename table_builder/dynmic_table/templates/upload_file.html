@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Excel File</title>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="excel_file" id="fileInput" style="display: none;">
+        <button type="button" onclick="openFileExplorer()">اختر ملف Excel</button>
+    </form>
+
+
+    <div class="scrollable-table">
+        {}
+    </div>
+    
+
+    <script>
+        function openFileExplorer() {
+            document.getElementById('fileInput').click();
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function() {
+            var file = this.files[0];
+            var formData = new FormData();
+            formData.append('excel_file', file);
+
+            fetch('/upload_file/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert('تم استيراد البيانات بنجاح!');
+            })
+            .catch(error => {
+                console.error('حدث خطأ: ', error);
+            });
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
+
+import pandas as pd
+
+# قراءة البيانات من ملف Excel
+df = pd.read_excel('path/to/your/file.xlsx')
+
+# تحويل البيانات إلى جدول HTML
+html_table = df.to_html(classes='scrollable-table', index=False)
+
+# عرض البيانات في جدول HTML
+print('''<!DOCTYPE html>
+<html>
+<head>
+<title>Data Table</title>
+<style>
+.scrollable-table {
+    width: 100%;
+    overflow-x: auto;
+}
+</style>
+</head>
+<body>
+
+<div class="scrollable-table">
+    {}
+</div>
+
+</body>
+</html>'''.format(html_table))

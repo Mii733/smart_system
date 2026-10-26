@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}
+{% endblock page_title %}
+{% block content %}
+
+<h2>إضافة شرط جديد على {{ model_name }}</h2>
+
+<div>
+    <form method="POST" action="" class="container" enctype="multipart/form-data">
+        <div id="close" class="text-left">
+            <a href="{% url 'condition_list' model_name sys_name_id %}">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </a>
+        </div>
+        
+        <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </div>
+        <!-- حقول مخفية لحفظ القيم المختارة -->
+        <input type="hidden" name="selected_field1" id="selected_field1">
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-primary btn-sm">حفظ</button>
+        </div>
+    </form>
+    
+</div>
+{% endblock content %}
+{% block scripts %}
+
+<script>
+    $(document).on('change','#id_dependent_field',function(){
+  
+  var url = "{% url 'get_selected_field' %}"
+  var selected_field=$('#id_dependent_field').val()
+  alert(selected_field)
+ 
+    $.ajax({
+          method:"post",
+          url: url,
+          data: {
+          'selected_field':selected_field,
+          'csrfmiddlewaretoken':$('input[name="csrfmiddlewaretoken"]').val()},
+          success: function (data) {
+              
+              if(data.status==1){
+
+            //   alert(data.field_name)
+                $("#selected_field1").val(data.field_name);
+                
+          }
+         else{
+
+          console.log(data.error);
+         }
+     },
+     error:function(data){
+     }
+ });
+});
+
+</script>
+
+{% endblock scripts %}
+
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}
+{% endblock page_title %}
+{% block content %}
+
+<h2>إضافة شرط جديد على {{ model_name }}</h2>
+
+<div>
+    <form method="POST" action="" class="container" enctype="multipart/form-data">
+        <div id="close" class="text-left">
+            <a href="{% url 'condition_list' model_name sys_name_id %}">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </a>
+        </div>
+        
+        <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-primary btn-sm">حفظ</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+    $(document).on('change','#id_dependent_field',function(){
+        var url = "{% url 'get_restricted_values' %}"
+        var selected_field = $('#id_dependent_field').val()
+        var model_name = "{{ model_name }}"
+        alert(selected_field)
+     
+        $.ajax({
+            method: "post",
+            url: url,
+            data: {
+                'model_name': model_name,
+                'selected_field': selected_field,
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (data) {
+                if(data.status == 1) {
+                    // تحديث حقل restricted_values
+                    var restrictedValuesField = $('#id_restricted_values');
+                    restrictedValuesField.empty();
+                    $.each(data.restricted_values, function(index, value) {
+                        restrictedValuesField.append(new Option(value[1], value[0]));
+                    });
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log("AJAX Error:", data);
+            }
+        });
+    });
+</script>
+
+{% endblock scripts %}

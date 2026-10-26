@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block content %}
+{% if modelCreated %}
+  <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+  <strong>Hurray!</strong> New model {{ modelName }} created successfully.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+{% elif modelExists %}
+  <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+  <strong>عذرا!</strong> {{ modelName }} model already exists.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+{% endif %}
+<div class="text-center">
+  <h1 class="animate__animated animate__wobble mt-2">  إنشا جدول تلقائي</h1>
+</div>
+
+<form action="{% url 'create_models' sys_name_id=sys_name_id %}" method="post" class="container" id="form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h2 class='text-center h2text'> هيكل الجدول</h2>
+    <div class="form-group">
+      <!-- <input type="text" pattern="^[A-Z][a-z]+" required="required" name="modelname" placeholder="Enter modelname"/> -->
+      <input type="text"  required="required" name="modelname" placeholder="ادخل اسم الجدول "/>
+      <label class="control-label" for="input">اسم الجدول</label>
+			<i class="bar"></i>
+			<!-- <i class="input-error">   ادخل اسم الجدول</i> -->
+    </div>
+    <div class="form-group">
+      <select name="model_type" required="required">
+        <option value="تهية">تهية</option>
+        <option value="عمليات">عمليات</option>
+      </select>
+      <label class="control-label" for="select">إختار نوع الجدول</label><i class="bar"></i>
+    </div>
+    <!-- <div class="form-group">
+      <input type="text"  required="required" name="modelnameAr" placeholder="ادخل اسم الجدول عربي"/>
+      <label class="control-label" for="input"> اسم الجدول عربي</label>
+			<i class="bar"></i>
+			<i class="input-error">   ادخل اسم الجدول عربي</i>
+    </div> -->
+    <h2 class='text-center h2text' id="field1"> هيكل الحقل 1</h2>
+		<div class="form-group">
+      <!-- <input type="text" pattern="[a-zA-Z]+" required="required" name="field1" placeholder="Enter fieldname"/> -->
+      <input type="text"  required="required" name="field1" placeholder="Enter fieldname"/>
+      <label class="control-label" for="input">اسم الحقل</label>
+			<i class="bar"></i>
+			<!-- <i class="input-error">ادخل اسم الحقل</i> -->
+    </div>
+    <!-- <div class="form-group">
+      <input type="text"  required="required" name="verbose_name1" placeholder=" اسم الحقل عرب"/>
+      <label class="control-label" for="input">اسم الحقل عربي</label>
+			<i class="bar"></i>
+			<i class="input-error">ادخل اسم الحقل</i>
+    </div> -->
+    <div class="form-group">
+      <select name="datatype1" id="datatype1" required="required" onchange="handleDataTypeChange()">
+        <option value="django.db.models.CharField">نص</option>
+        <option value="django.db.models.TextField">نص طويل</option>
+        <option value="django.db.models.IntegerField">عدد حقيقي </option>
+        <option value="django.db.models.FloatField">عدد عشري</option>
+        <option value="django.db.models.BooleanField">منطقي</option>
+        <option value="django.db.models.DateTimeField">تاريخ/ وقت</option>
+        <option value="django.db.models.ForeignKey">علاقة/ربط</option>
+        <option value="django.db.models.ImageField">صورة</option>
+      </select>
+      <label class="control-label" for="select"> إختار نوع الحقل</label><i class="bar"></i>
+    </div>
+    <div class="form-group" id="relatedModel" style="display: none;">
+       <!-- إضافة حقل اختيار الجدول المراد  -->
+      <div class="form-group">
+        <select name="to1" id="to1" required="required"  aria-label="Default select example">
+          <option selected>  اختار الجدول المراد </option>
+          {% for table in tables %}
+          <option value="{{table.name}}">{{ table.name }}</option>
+          {% endfor %}
+        </select>
+        <label class="control-label" for="select">اختار الجدول المراد ?</label><i class="bar"></i>
+      </div>
+      <div class="form-group">
+        <select name="on_delete1" required="required">
+          <option value="models.CASCADE">CASCADE</option>
+          <option value="models.PROTICT">PROTICT</option>
+        </select>
+        <label class="control-label" for="select">Choose PROTICT or CASCADE?</label><i class="bar"></i>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+     <input type="number" min="0" max="6000" required="required" name="maxlen1" placeholder=" إدخل طول الحقل"/>
+     <label class="control-label" for="input">Maxlength</label>
+     <i class="bar"></i>
+     <i class="input-error">العدد المسموح بة (0 - 6000)</i>
+    </div>
+    <div class="form-group">
+      <select name="null1" required="required">
+        <option value="True">نعم</option>
+        <option value="False">لا</option>
+      </select>
+      <label class="control-label" for="select">فارغ  او لا ?</label><i class="bar"></i>
+    </div>
+    <div class="form-group">
+      <select name="blank1" required="required">
+        <option value="False">لا</option>
+        <option value="True">نعم</option>
+      </select>
+      <label class="control-label" for="select">Choose False or True blank?</label><i class="bar"></i>
+    </div>
+    <div class="form-group">
+      <select name="unique1" required="required">
+        <option value="True">نعم</option>
+        <option value="False">لا</option>
+      </select>
+      <label class="control-label" for="select">يمكن التكرار ?</label>
+      <i class="bar"></i>
+    </div>
+    <div class="row" id="buttonArea">
+      <div class="col-sm-6">
+        <div class="button-container">
+          <button class="button" type="button" style="border-radius:10px;font-size:2rem;" onclick="addFieldForm()"><span class="fa fa-plus"></span></button>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="button-container">
+          <button class="button" type="submit" style="border-radius:10px;font-size:2rem;"><span><strong>حفظ</strong></span></button>
+        </div>
+      </div>
+    </div>
+</form>
+<script>
+  function handleDataTypeChange() {
+    var datatypeSelect = document.getElementById("datatype1");
+    var selectedValue = datatypeSelect.options[datatypeSelect.selectedIndex].value;
+  
+    var relatedModelField = document.getElementById("relatedModel");
+    if (selectedValue === "django.db.models.ForeignKey") {
+      relatedModelField.style.display = "block";
+      // يمكنك هنا تنفيذ الإجراءات اللازمة عندما يتم اختيار "مفتاح ثانوي"
+        // ForeignKey(الجدول الذي تم اختيارة, on_delete=models.CASCADE, related_name='related_table', blank=True, null=True),
+      
+    } else {
+      relatedModelField.style.display = "none";
+    }
+  }
+  </script>
+  
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+{% endblock %}
+
+<!-- <script>
+function handleDataTypeChange() {
+  var datatypeSelect = document.getElementById("datatype1");
+  var selectedValue = datatypeSelect.options[datatypeSelect.selectedIndex].value;
+
+  var relatedModelField = document.getElementById("relatedModelField");
+  if (selectedValue === "django.db.models.ForeignKey") {
+    relatedModelField.style.display = "block";
+
+    // استدعاء AJAX لجلب الجداول المتاحة
+    $.ajax({
+      url: '/get_tables/', // تعديل الرابط الخاص بجلب الجداول
+      method: 'GET',
+      success: function(response) {
+        // عرض القائمة المنسدلة للاختيار من الجداول المتاحة
+        var tableSelect = document.createElement("select");
+        tableSelect.name = "related_table";
+        response.tables.forEach(function(table) {
+          var option = document.createElement("option");
+          option.value = table;
+          option.text = table;
+          tableSelect.appendChild(option);
+        });
+        tableSelect.onchange = function() {
+          var selectedTable = this.value;
+
+          // تحديث القيمة المحددة في حقل ForeignKey
+          var foreignKeyInput = document.getElementById("id_foreign_key_field"); // استبدل "id_foreign_key_field" بالمعرف الصحيح لحقل ForeignKey
+          foreignKeyInput.value = selectedTable;
+        };
+        relatedModelField.appendChild(tableSelect);
+      }
+    });
+
+  } else {
+    relatedModelField.style.display = "none";
+    relatedModelField.innerHTML = ""; // إزالة أي عناصر سابقة في حقل الاختيار
+  }
+}
+</script> -->
+

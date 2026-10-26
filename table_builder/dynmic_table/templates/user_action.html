@@ -1,0 +1,197 @@
+{% extends 'base.html'%}
+
+{% load static %}
+
+{% block page_title %}
+{% endblock page_title %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'dist/css/custom.css' %}">
+<link rel="stylesheet" href="{% static 'css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/select2.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.dataTables.min.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+<style>
+    .dataTables_info,
+    .dataTables_legthChange,
+    .dataTables_paginate {
+        display: none;
+    }
+</style>
+
+<style>
+    @media print {
+
+        .dt-buttons,
+        .dataTables_info,
+        .paging_simple_numbers,
+        .dataTables_filter {
+            display: none;
+        }
+    }
+</style>
+
+
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <button type="button" class="btn btn-primary btn-search" data-toggle="modal"
+                        data-target="#modal-lg2">
+                        بحث متعدد
+                    </button>
+                    <a class="btn btn-outline-primary btn-sm float-right" id="btnbtn" title="الرجوع إلى الصفحة السابقة"
+                        href="{% url 'users' %}"> رجوع
+                        <i class='fas fa-sign-out-alt' style='font-size:24px;'></i>
+                    </a>
+                </div>
+                <!-- <div class="card-header no-print">
+                    <div class="row">
+                        <form method="post" class="container">
+                            <div class="form-group">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-search">بحث</button>
+                        </form>
+                    </div>
+                </div> -->
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="scrollable-table">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>المستخدم</th>
+                                    <th>العملية</th>
+                                    <th>نطاق العملية</th>
+                                    <th>البيانات</th>
+                                    <th>التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for action in actions %}
+                                <tr>
+                                    <td>{{ action.user.username }}</td>
+                                    <td>{{ action.action }}</td>
+                                    <td>{{ action.model_name }}</td>
+                                    <td>{{ action.details }}</td>
+                                    <td>{{ action.timestamp }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5">لا توجد نتائج مطابقة.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+<section>
+    <div class="modal fade" id="modal-lg2">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"> تنقية البيانات </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Main modal -->
+                    <form method="POST" action="">
+                        <div class="form-group">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                        </div>
+
+                        <div class="modal-footer justify-content-between">
+                            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button> -->
+                            <button type="submit" class="btn btn-primary btn-search">بحث</button>
+                            <!-- <input type="submit" class="btn btn-primary btn-search" value="بحث"> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+</section>
+
+
+
+<div class="modal fade" id="columnVisibilityModal" tabindex="-1" role="dialog" aria-labelledby="columnVisibilityLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="columnVisibilityLabel">إظهار/إخفاء الأعمدة</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="columnVisibilityCheckboxes"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                <button type="button" class="btn btn-primary" id="applyVisibility">تطبيق</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.print.js'%}"></script>
+<script src="{% static 'plugins/jszip/jszip.min.js'%}"></script>
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js'%}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js'%}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js'%}"></script>
+
+
+
+
+<script src="{% static 'js/jquery-3.6.0.min.js'%}"></script>
+<script src="{% static 'js/select2.js'%}"></script>
+
+<!-- DeepSeek -->
+<script>
+    $(function () {
+        $('#id_user').select2({
+            placeholder: 'بحث',
+            width: "100%"
+        })
+    });
+</script>
+
+
+{% endblock %}

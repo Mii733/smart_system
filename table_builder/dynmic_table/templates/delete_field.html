@@ -1,0 +1,31 @@
+{% extends 'index.html'%} 
+{% block page_title %}
+{% endblock page_title %} 
+{% block content %}
+
+
+<h5>تأكيد الحذف</h5>
+
+<h5> {{model_name}} </h5>
+<h5> {{model_name}} </h5>
+
+
+
+<script>
+    function confirmDelete() {
+        if (confirm("هل أنت متأكد من رغبتك في حذف العنصر؟")) {
+            // إذا تم تأكيد الحذف
+            document.getElementById("deleteForm").submit();
+        } else {
+            // إذا تم إلغاء الحذف
+            return false;
+        }
+    }
+</script>
+
+<form id="deleteForm" action="" method="post">
+    {% csrf_token %}
+    <button type="button" onclick="confirmDelete()">حذف العنصر</button>
+</form>
+
+{% endblock %} 

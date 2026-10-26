@@ -1,0 +1,180 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    /* تصميم الجسم الرئيسي */
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #3c3c3c;
+    }
+
+    
+    /* تصميم الحاوية التي تحتوي على الأزرار */
+    .container {
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* تصميم الأعمدة داخل الحاوية */
+    .col {
+        margin: 15px;
+        text-align: center;
+    }
+
+    /* تصميم البطاقات */
+    .card {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        padding: 20px;
+        width: 230px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 500;
+        text-decoration: none;
+        color: #1e2a3a; /* اللون الأساسي الداكن */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        background-color: #34495e;
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* تصميم زر العودة */
+    /* .back-button {
+        background-color: #ffffff;
+        color: #1e2a3a;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 30px;
+        transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+        background-color: #34495e;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .back-button:active {
+        background-color: #1c5981;
+        transform: translateY(2px);
+    } */
+
+    
+    /* تحسين التصميم للأجهزة الصغيرة */
+    @media (max-width: 768px) {
+        .container1 {
+            padding: 15px;
+        }
+
+        #modelname, select {
+            padding: 10px;
+        }
+
+        .button1 {
+            padding: 10px 20px;
+        }
+    }
+    .container1 {
+      max-width: 850px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e1e1e1;
+  }
+</style>
+
+
+<!-- الأزرار التي تقود إلى الأقسام المختلفة -->
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'roles' %}" class="card">المجموعات</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'roles2' %}" class="card">صلاحيات الانظمة</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'users' %}" class="card">المستخدمين</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'subprojects_manage' %}" class="card">الأنظمة</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'custm_report_header_edit' %}" class="card">التقارير</a>
+        </div>
+        <div class="col">
+            <button type="button" class="card" data-toggle="modal" data-target="#modal-lg">
+                نظام جديد
+              </button>
+        </div>
+    </div>
+</div>
+
+
+
+<section>
+    <!-- <div class="container1"> -->
+        <div class="modal fade" id="modal-lg">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">  إظافة نظام </h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <!-- Main modal -->
+                    <form method="POST" action="">
+                      <div class="form-group">
+                          {% csrf_token %}
+                          {{ form.as_p }}
+                      </div>
+          
+                  <div class="modal-footer justify-content-between">
+                    <!-- <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button> -->
+                    <input type="submit" value="حفظ">
+                  </div>
+                </form>
+            </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
+    <!-- </div> -->
+   
+  
+  </section>
+
+{% endblock %}

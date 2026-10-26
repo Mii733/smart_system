@@ -1,0 +1,354 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+
+
+{% if fieldcreated %}
+<div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+  <strong>Hurray!</strong> New model {{ field }} created successfully.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% elif fieldExists %}
+<div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+  <strong>عذرا!</strong> {{ field }} 'الحقل موجود فعلا''..
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="alert-container">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    /* max-width: 600px; */
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    direction: rtl;
+    /* توجيه العناصر إلى اليمين */
+  }
+
+  /* .form-group {
+    margin-bottom: 20px;
+  } */
+
+  input,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .button-container {
+    text-align: center;
+  }
+
+  /* .button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    background-color: #0056b3;
+  } */
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 10px;
+      border-radius: 0;
+    }
+
+    input,
+    select {
+      padding: 8px;
+    }
+
+    .button {
+      padding: 8px 16px;
+    }
+  }
+
+  #close {
+    direction: ltr;
+    /* توجيه العناصر إلى اليمين */
+    margin: 5px;
+
+  }
+</style>
+<!-- 
+<style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    padding: 8px 0;
+  }
+
+  .dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+</style> -->
+
+
+
+
+<form action="" method="post" class="container" id="form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div id="close">
+    <a href="{% url 'manage_models' model_name=model_name sys_name_id=sys_name_id %}" class="close" data-dismiss="modal"
+      aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </a>
+  </div>
+  <h2 class='text-center h2text' id="field"> هيكل الحقل </h2>
+  <div class="form-group">
+    <!-- <input type="text" pattern="[a-zA-Z]+" required="required" name="field1" placeholder="Enter fieldname"/> -->
+    <!-- <input type="text" required="required" name="field" placeholder="ادخل اسم الحقل" /> -->
+    <input type="text" required="required" name="field" placeholder="ادخل اسم الحقل"
+       id="arabicInput" />
+
+
+
+    <!-- <label class="control-label" for="input">Fieldname</label> -->
+    <i class="bar"></i>
+    <!-- <i class="input-error">ادخل اسم الحقل</i> -->
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="select">إختار نوع الحقل</label><i class="bar"></i>
+    <select name="datatype" id="datatype" required="required" onchange="handleDataTypeChange()">
+      <option value="django.db.models.CharField">نص</option>
+      <option value="django.db.models.TextField">نص طويل</option>
+      <option value="django.db.models.IntegerField">عدد حقيقي </option>
+      <option value="django.db.models.FloatField">عدد عشري</option>
+      <option value="django.db.models.BooleanField">منطقي</option>
+      <option value="django.db.models.DateTimeField">تاريخ/ وقت</option>
+      <option value="django.db.models.ForeignKey">علاقة/ربط</option>
+      <option value="django.db.models.ManyToManyField">ربط باكثر من قيمة</option>
+      <option value="django.db.models.FileField">ملف</option>
+      <option value="django.db.models.ImageField">صورة</option>
+    </select>
+    <!-- <label class="control-label" for="select">Select datatype</label><i class="bar"></i> -->
+  </div>
+  <div class="form-group" id="relatedModel" style="display: none;">
+    <div class="row">
+      <div class="col-2 dropdown">
+        <select name="to" id="to" required="required" aria-label="Default select example">
+          <option selected>اختار الجدول ؟</option>
+          {% for model in modelName %}
+          <div style="background-color: green;">
+            <option value="{{model.modelnameAr}}">{{ model.modelnameAr }}</option>
+          </div>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-2 dropdown">
+        <select name="relatedField" id="relatedField" required="required" aria-label="Default select example">
+          <option selected>اختار الحقل ؟</option>
+          <!-- <option  value="">  ؟</option> -->
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="form-group" id="maxlen_field">
+    <label class="control-label" for="input"> طول الحقل</label>
+    <input type="number" min="0" max="99" name="maxlen" placeholder="إدخل طول الحقل" id="maxlen" oninput="validateLength(this)" />
+
+    <!-- <input type="number" min="0" max="2" name="maxlen" placeholder="إدخل طول الحقل" /> -->
+    <i class="bar"></i>
+    <i class="input-error">العدد المسموح بة (0 - 99)</i>
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="select">فارغ او لا ?</label><i class="bar"></i>
+    <select name="null" required="required">
+      <option value="True">نعم</option>
+      <option value="False">لا</option>
+    </select>
+  </div>
+  <!-- <div class="form-group">
+    <label class="control-label" for="select">Choose False or True blank?</label><i class="bar"></i>
+    <select name="blank" required="required">
+      <option value="True">نعم</option>
+      <option value="False">لا</option>
+    </select>
+  </div> -->
+  <div class="form-group">
+    <label class="control-label" for="select">يمكن التكرار ?</label>
+    <select name="unique" required="required">
+      <option value="True">نعم</option>
+      <option value="False">لا</option>
+
+    </select>
+    <i class="bar"></i>
+  </div>
+  <div class="row" id="buttonArea">
+    <!-- <div class="col-sm-6">
+        <div class="button-container">
+          <button class="button" type="button" style="border-radius:10px;font-size:2rem;" onclick="addFieldForm()"><span class="fa fa-plus"></span></button>
+        </div>
+      </div> -->
+    <!-- <div class="col-sm-6">
+      <div class="button-container">
+        <button class="button" type="submit"
+          style="border-radius:10px;font-size:2rem;"><span><strong>حفظ</strong></span></button>
+      </div>
+    </div>
+    <div class="button-container">
+      <button class="button" type="submit"
+        style="border-radius:10px;font-size:2rem;"><span><strong>حفظ</strong></span></button>
+    </div> -->
+  </div>
+  <div class="modal-footer">
+    
+    <button type="submit" class="btn btn-outline-primary btn-sm">حفظ</button>
+</div>
+
+  
+</form>
+
+<script>
+  document.getElementById("arabicInput").addEventListener("input", function() {
+      this.value = this.value.replace(/[^ء-ي\s]/g, ""); 
+  });
+</script>
+
+<script>
+  function validateLength(input) {
+    // التأكد من أن الرقم المدخل لا يزيد عن رقمين
+    if (input.value > 99) {
+      input.value = 99;  // تعيين الرقم إلى الحد الأقصى (99)
+    }
+  }
+</script>
+
+<!-- لعرض اسما حقول الجدول المراد الارتباط بة -->
+<script>
+  document.getElementById('to').addEventListener('change', function () {
+    var selectedTable = this.value;
+    // alert("gggggggggggggggggggggg")
+    // استدعاء صفحة PHP لاسترداد البيانات
+    fetch('/get_fields/?table=' + selectedTable)
+      .then(response => response.json())
+      .then(data => {
+        var relatedFieldSelect = document.getElementById('relatedField');
+        relatedFieldSelect.innerHTML = ''; // لحذف الخيارات القديمة
+
+        data.forEach(function (item) {
+          var option = document.createElement('option');
+          option.value = item.name;
+          // alert(item.name)
+          option.textContent = item.name;
+          relatedFieldSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.error('حدث خطأ: ', error));
+  });
+</script>
+
+<script>
+  function handleDataTypeChange() {
+    var datatypeSelect = document.getElementById("datatype");
+    var selectedValue = datatypeSelect.options[datatypeSelect.selectedIndex].value;
+
+    var relatedModel = document.getElementById("relatedModel");
+    var relatedField = document.getElementById("relatedModelField");
+    if (selectedValue === "django.db.models.ForeignKey" || selectedValue === "django.db.models.ManyToManyField" ) {
+      relatedModel.style.display = "block";
+      relatedField.style.display = "block";
+      // يمكنك هنا تنفيذ الإجراءات اللازمة عندما يتم اختيار "مفتاح ثانوي"
+      // ForeignKey(الجدول الذي تم اختيارة, on_delete=models.CASCADE, related_name='related_table', blank=True, null=True),
+
+    } else {
+      relatedModel.style.display = "none";
+      relatedField.style.display = "none";
+    }
+  }
+</script>
+
+<!-- خاص با اخفاء حقل طول الحقل -->
+<script>
+  const fieldSelect = document.getElementById('datatype');
+  const maxlenField = document.getElementById('maxlen_field');
+
+  fieldSelect.addEventListener('change', function () {
+    if (fieldSelect.value === 'django.db.models.FileField' || fieldSelect.value === 'django.db.models.ImageField' || fieldSelect.value === 'django.db.models.FloatField' || fieldSelect.value === 'django.db.models.IntegerField'|| fieldSelect.value === 'django.db.models.DateTimeField' || fieldSelect.value === 'django.db.models.BooleanField' || fieldSelect.value === 'django.db.models.ForeignKey' || fieldSelect.value === 'django.db.models.ManyToManyField') {
+      maxlenField.style.display = 'none';
+
+    } else {
+      maxlenField.style.display = 'block';
+      maxlenField.required = required
+
+    }
+  });
+</script>
+
+<script>
+  $(function () {
+    $('#id_department').select2({
+      placeholder: 'من فضلك اختار جهة',
+      width: "100%"
+    })
+  });
+</script>
+
+{% endblock %}

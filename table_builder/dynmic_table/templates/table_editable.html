@@ -1,0 +1,426 @@
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض البيانات</title>
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 5px;
+    }
+    
+    .grid-item {
+        background-color: #f0f0f0;
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+</head>
+<body>
+<input type="file" id="fileInput" accept=".xls,.xlsx">
+<button onclick="handleFile()">تحميل البيانات</button>
+<div id="gridData"></div>
+<script>
+    function handleFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsBinaryString(file);
+            reader.onload = function(e) {
+                const data = e.target.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                const gridData = document.getElementById('gridData');
+                gridData.innerHTML = '';
+
+                const headers = jsonData[0];
+
+                headers.forEach(header => {
+                    const columnData = document.createElement('div');
+                    columnData.classList.add('grid-item');
+                    columnData.textContent = header;
+                    gridData.appendChild(columnData);
+
+                    jsonData.slice(1).forEach(rowData => {
+                        const cell = document.createElement('div');
+                        cell.classList.add('grid-item');
+                        cell.textContent = rowData[headers.indexOf(header)];
+                        gridData.appendChild(cell);
+                    });
+                });
+            };
+        } else {
+            alert('الرجاء اختيار ملف Excel.');
+        }
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</body>
+</html> -->
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض البيانات</title>
+<style>
+    .grid-container {
+        display: grid;
+        width: 100%;
+        /* border-collapse: collapse; */
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 5px;
+    }
+    
+    .grid-item {
+        background-color: #f0f0f0;
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .grid-item input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+</head>
+<body>
+<input type="file" id="fileInput" accept=".xls,.xlsx">
+<button onclick="handleFile()">تحميل البيانات</button>
+<div class="grid-container" id="gridData"></div>
+<script>
+    function handleFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsBinaryString(file);
+            reader.onload = function(e) {
+                const data = e.target.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                const gridData = document.getElementById('gridData');
+                gridData.innerHTML = '';
+
+                jsonData.forEach((rowData, rowIndex) => {
+                    rowData.forEach((value, columnIndex) => {
+                        const cell = document.createElement('div');
+                        cell.classList.add('grid-item');
+                        const input = document.createElement('input');
+                        input.value = value;
+                        input.setAttribute('data-row', rowIndex);
+                        input.setAttribute('data-col', columnIndex);
+                        cell.appendChild(input);
+                        gridData.appendChild(cell);
+                    });
+                });
+            };
+        } else {
+            alert('الرجاء اختيار ملف Excel.');
+        }
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</body>
+</html> -->
+
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض البيانات</title>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td, input{
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+    button{
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<input type="file" id="fileInput" name="Excel_file" accept=".xls,.xlsx">
+<button onclick="handleFile()">تحميل البيانات</button>
+<table id="dataTable">
+    <thead>
+        <tr></tr>
+    </thead>
+    <tbody id="dataBody"></tbody>
+</table>
+<script>
+    function handleFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsBinaryString(file);
+            reader.onload = function(e) {
+                const data = e.target.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                const tableHead = document.querySelector('#dataTable thead tr');
+                const tableBody = document.getElementById('dataBody');
+                
+                tableHead.innerHTML = '';
+                tableBody.innerHTML = '';
+                
+                jsonData[0].forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    tableHead.appendChild(th);
+                });
+                const th_action = document.createElement('th');
+                th_action.textContent = 'الحدث';
+                tableHead.appendChild(th_action);
+
+                jsonData.slice(1).forEach(rowData => {
+                    const row = document.createElement('tr');
+                    rowData.forEach(value => {
+                        const cell = document.createElement('td');
+                        const input = document.createElement('input');
+                        input.value = value;
+                        cell.appendChild(input);
+                        row.appendChild(cell);
+                    });
+                    const cell = document.createElement('td');
+                    const btn_edit = document.createElement('button');
+                    btn_edit.textContent = 'تعديل';
+                    btn_edit.classList.add('edit-btn'); // إضافة الـ class هنا
+                    const btn_delete = document.createElement('button');
+                    btn_delete.textContent = 'حذف';
+                    btn_delete.classList.add('delete'); // إضافة الـ class هنا
+                    // cell.appendChild(btn_edit);
+                    // cell.appendChild(btn_delete);
+
+                    row.appendChild(cell);
+                    row.appendChild(btn_edit);
+                    row.appendChild(btn_delete);
+                    tableBody.appendChild(row);
+                });
+            };
+        } else {
+            alert('الرجاء اختيار ملف Excel.');
+        }
+    }
+</script>
+<!-- upload_excel.html -->
+<!-- <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form> -->
+
+{% if data %}
+    <h2>Preview Data:</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Value</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                    <!-- <td>{{ row }}</td> -->
+                    <td>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const table = document.getElementById('dataTable');
+
+        table.addEventListener('click', function(event) {
+            const target = event.target;
+            if (target.tagName === 'BUTTON' && target.classList.contains('edit-btn')) {
+                const row = target.closest('tr');
+                // يمكنك هنا تنفيذ عملية تعديل للصف
+                console.log('Editing row:', row);
+            } else if (target.tagName === 'BUTTON' && target.classList.contains('delete-btn')) {
+                const row = target.closest('tr');
+                alert('الرجاااااااااااا.');
+
+                // يمكنك هنا تنفيذ عملية حذف للصف
+                row.remove();
+            }
+        });
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</body>
+</html>
+
+
+<!-- 
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض البيانات</title>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<button onclick="fetchAndDisplayData()">احضر البيانات</button>
+<table id="dataTable">
+    <thead>
+        <tr id="tableHeaders"></tr>
+    </thead>
+    <tbody id="dataBody"></tbody>
+</table>
+<script>
+    function fetchAndDisplayData() {
+        fetch('/import_data_from_excel2/')
+            .then(response => response.json())
+            .then(data => {
+                const tableHeaders = Object.keys(data[0]);
+                const tableHeadersRow = document.getElementById('tableHeaders');
+
+                tableHeadersRow.innerHTML = '';
+                tableHeaders.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    tableHeadersRow.appendChild(th);
+                });
+
+                const tableBody = document.getElementById('dataBody');
+                tableBody.innerHTML = '';
+
+                data.forEach(rowData => {
+                    const row = document.createElement('tr');
+                    tableHeaders.forEach(header => {
+                        const cell = document.createElement('td');
+                        cell.textContent = rowData[header];
+                        row.appendChild(cell);
+                    });
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('حدث خطأ: ', error));
+    }
+</script>
+</body>
+</html> -->
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>عرض بيانات JSON كجدول</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table id="data-table">
+        <thead>
+            <tr id="table-header">
+                 Table headers will be added dynamically 
+            </tr>
+        </thead>
+        <tbody id="table-body">
+             Table rows will be added dynamically 
+        </tbody>
+    </table>
+
+    <script>
+        fetch('/import_data_from_excel/')
+            .then(response => response.json())
+            .then(data => {
+                var jsonData = data;
+
+                // استخراج عناوين الأعمدة من البيانات
+                var headers = Object.keys(jsonData[0]);
+                var headerRow = document.getElementById("table-header");
+
+                // إنشاء عناوين الأعمدة
+                headers.forEach(function(header) {
+                    var th = document.createElement("th");
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+
+                // إنشاء صفوف البيانات
+                var tableBody = document.getElementById("table-body");
+                jsonData.forEach(function(rowData) {
+                    var row = document.createElement("tr");
+                    headers.forEach(function(header) {
+                        var cell = document.createElement("td");
+                        cell.textContent = rowData[header];
+                        row.appendChild(cell);
+                    });
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('حدث خطأ: ', error));
+    </script>
+</body>
+</html> -->

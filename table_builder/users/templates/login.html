@@ -1,0 +1,95 @@
+
+
+
+ 
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <title>Login</title>
+    
+    <style>
+        body {
+            direction: rtl; 
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-6">
+            {% if form.errors %}
+         
+            <div class="alert alert-danger alert-dismissible" role="alert">
+         
+                <div id="form_errors">
+                    {% for key, value in form.errors.items %}
+                        <strong>{{ value }}</strong>
+                    {% endfor %}
+                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+         
+            {% endif %}
+        </div>
+         
+        {% for message in messages %}
+                      <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                          {{ message }}
+                      </div>
+        {% endfor %}
+        <form method="post">
+            {% csrf_token %}
+            <p>
+                <label for="id_username">اسم المستخدم:</label>
+                {{ form.username }}
+            </p>
+            <p>
+                <label for="password">كلمة المرور:</label>
+                {{ form.password }} 
+            </p>
+            <button type="submit">دخول</button>
+        </form>
+    </div>
+</body>
+
+</html>
+

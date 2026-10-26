@@ -1,0 +1,168 @@
+
+
+
+
+
+<!-- add_user.html -->
+<!-- <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add User</button>
+</form> -->
+
+
+
+
+{% load static %}
+{% block page_title %}
+{% endblock page_title %} 
+{% block content %}
+
+
+<!-- Custom style for RTL -->
+<link rel="stylesheet" href="{% static 'dist/css/custom.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/select2.css' %}">
+  
+
+
+<h1>   مستخدم جديد </h1>
+
+<!-- <h5> {{model_name}} </h5>
+<h5> {{model_name}} </h5> -->
+
+
+
+
+
+
+<style>
+    /* .container{
+        width: 80%;
+    } */
+    /* تخصيص تنسيق الحقول */
+    .form-group {
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-gap: 10px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+
+    /* تخصيص زر الإرسال */
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        
+    }
+
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    form {
+        /* max-width: 400px; */
+        max-width: 80%;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-footer a {
+        text-decoration: none;
+    }
+    #close{
+        position: absolute;
+        margin-bottom: 20px;
+        /* padding: 20px; */
+        left: 10%;
+        margin: 5px;
+    }
+    /* CSS لتحديد ارتفاع ثابت للقائمة المنسدلة */
+    .ul {
+        max-height: 100px; /* ارتفاع ثابت */
+        overflow-y: auto; /* تمكين التمرير العمودي */
+    }
+</style>
+
+<div>
+<div id="close">
+    <a href="{% url 'manage_user' %}">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </a>
+</div>
+
+<form method="POST" action="" class="container">
+    <div class="form-group">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </div>
+    <div class="modal-footer">
+        
+        <button type="submit" class="btn btn-outline-primary btn-sm">حفظ</button>
+    </div>
+</form>
+</div>
+
+{% endblock %} 
+
+
+
+
+
+
+

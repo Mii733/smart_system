@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+
+<!-- قسم إضافة مجموعة صلاحيات -->
+<div class="col-md-12 col-sm-12 col-xs-10">
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+                <h5 class="box-title titlefix">{% trans "إضافة مجموعة صلاحيات" %}</h5>
+                <!-- <h3 class="box-title titlefix">{% trans 'صلاحيات' %}</h3> -->
+
+                <a class="btn btn-outline-primary btn-sm" id="btnbtn" title="الرجوع إلى الصفحة السابقة" href="{% url 'system_manage' %}">
+                    <i class="fas fa-sign-out-alt" ></i> {% trans "رجوع" %}
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <form method="post" class="needs-validation" novalidate accept-charset="utf-8">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.name }}
+                    </div>
+                </div>
+
+                <div class="form-footer d-flex justify-content-between">
+                    <button type="submit" class="btn btn-info">{% trans "حفظ" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- قسم عرض الجدول -->
+<div class="col-md-12 col-sm-12 col-xs-10">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="groupTable">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th>{% trans "#" %}</th>
+                            <th>{% trans "اسم المجموعة" %}</th>
+                            <th class="text-center">{% trans "العمليات" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in data %}
+                        <tr>
+                            <td>{{ group.id }}</td>
+                            <td>{{ group.name }}</td>
+                            <td class="text-center">
+                                <a href="{% url 'premission' group.id %}" class="btn btn-info btn-sm" data-toggle="tooltip" title="{% trans 'إدارة الصلاحيات' %}">
+                                    <i class="fa fa-cogs"></i>
+                                </a>
+                                <!-- زر التعديل يمكن إضافته لاحقاً إذا أردت -->
+                                <a href="{% url 'rolesEdit' group.id %}" class="btn btn-warning btn-sm" data-toggle="tooltip" title="{% trans 'تعديل' %}">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <!-- زر الحذف يمكن إضافته لاحقاً -->
+                                <a href="{% url 'delete_role' group.id %}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="{% trans 'حذف' %}" onclick="return confirm('{% trans 'هل تريد الاستمرار في الحذف؟' %}')">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- إضافة بعض السكربتات لتحسين تجربة المستخدم مثل تفعيل الـ DataTable -->
+<script>
+    $(document).ready(function() {
+        $('#groupTable').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+        });
+    });
+</script>
+
+{% endblock %}

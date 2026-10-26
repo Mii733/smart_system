@@ -1,0 +1,5 @@
+<ul>
+    {% for table in tables %}
+      <li><a href="{% url 'table_detail' table.id %}">{{ table.name }}</a></li>
+    {% endfor %}
+  </ul>

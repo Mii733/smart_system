@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}
+{% endblock page_title %}
+{% block content %}
+
+<!-- إضافة ملفات الـ CSS الأساسية للصفحة -->
+
+<h5 class="page-title text-center">عرض بيانات</h5>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 20px;
+        direction: rtl;
+    }
+
+    .container {
+        max-width: 850px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e1e1e1;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="number"]:focus,
+    .form-group select:focus {
+        border-color: #4CAF50;
+        outline: none;
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }
+
+    /* تخصيص زر الإرسال */
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 10px 0;
+    }
+
+    #close button {
+        background-color: #fcfaf9;
+        color: black;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #close button:hover {
+        background-color: #d32f2f;
+    }
+
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+    }
+</style>
+
+<div>
+    <form method="POST" action="" class="container">
+        <div id="close" class="text-left">
+            <a href="{% url 'display_data' model_name sys_name_id %}">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </a>
+        </div>
+
+        <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </div>
+        
+        <div class="modal-footer">
+            <!-- <button type="submit" class="btn btn-outline-primary btn-sm">حفظ</button> -->
+        </div>
+    </form>
+</div>
+
+{% endblock %}

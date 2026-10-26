@@ -1,0 +1,51 @@
+# ==========================================
+# Django table_builder - .gitignore
+# ==========================================
+
+# Virtual Environments
+.venv/
+.venv-1/
+venv/
+env/
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Distribution / Build / PyInstaller
+build/
+dist/
+*.spec
+
+# Environments & Sensitive Credentials
+.env
+.env.*
+!.env.example
+
+# Databases
+*.sqlite3
+*.sqlite3-journal
+
+# Media & Temporary Files
+media/*
+!media/.gitkeep
+*.xlsx
+*.xls
+*.csv
+uploaded_file.*
+ورقة عمل Microsoft Excel جديد.xlsx
+
+# Collected static files
+staticfiles/
+
+# Logs
+*.log
+
+# Editor & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

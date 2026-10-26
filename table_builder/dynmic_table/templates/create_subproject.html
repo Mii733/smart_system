@@ -1,0 +1,92 @@
+
+{% extends 'index.html'%} {% block page_title %}
+
+{% endblock page_title %} {% block content %}
+
+<style>
+  /* تخصيص تنسيق الحقول */
+  .form-group {
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-gap: 10px;
+  }
+
+  .form-group label {
+      font-weight: bold;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+
+  .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-top: 5px;
+  }
+
+  /* تخصيص زر الإرسال */
+  input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+      background-color: #45a049;
+  }
+</style>
+
+<!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">
+  Launch Large Modal
+</button> -->
+
+<section>
+  <div class="modal fade" id="modal-lg">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Large Modal</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Main modal -->
+            <form method="POST" action="">
+              <div class="form-group">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+              </div>
+  
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button>
+            <input type="submit" value="حفظ">
+
+          </div>
+          </form>
+      </div>
+
+
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+</section>
+
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p }}
+    <input type="submit" value="Save">
+  </form>
+
+  {% endblock %}
