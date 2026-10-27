@@ -62,7 +62,7 @@ smart_system/
 ### 1. استنساخ المستودع (Clone the Repository)
 
 ```bash
-git clone https://github.com/EngMoatasemAlasi/smart_system.git
+git clone https://github.com/Mii733/smart_system.git
 cd smart_system
 ```
 
